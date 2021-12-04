@@ -28,7 +28,55 @@
       {% if request.user.is_authenticated %}
         <form class="d-flex">
           {% csrf_token %}
-          {% comment %} <a class="text-1000" href="{% url 'cart:cart-list' %}"> {% endcomment %}
+
+          <a
+            class="dropdown-toggle d-flex align-items-center hidden-arrow"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-mdb-toggle="dropdown"
+            aria-expanded="false">
+            <img
+              src="{{ profile.picture.url }}"
+              class="rounded-circle me-1"
+              height="25"
+              alt=""
+              loading="lazy"
+            />
+            <span class="text-muted me-3">{{ profile.user.username }}</span>
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end me-10"
+            aria-labelledby="navbarDropdownMenuLink">
+            <li>
+              <a class="dropdown-item" href="{% url 'perfiles:perfil' user.username %}">{% translate "My profile" %}</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">{% translate "Settings" %} &raquo;</a>
+              <ul class="dropdown-menu dropdown-submenu">
+                <li>
+                  <a class="dropdown-item" href="{% url 'perfiles:edit_profile' %}">{% translate "Edit profile" %}</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'perfiles:direcciones' %}">{% translate "Add address" %}</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Submenu item 3 &raquo; </a>
+                  <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                      <a class="dropdown-item" href="#">Multi level 1</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">Multi level 2</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'account_logout' %}">{% translate "Log out" %}</a>
+            </li>
+          </ul>
           <a class="text-1000" href="#">
             <span class="badge badge-pill bg-danger">2</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart me-3"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -65,38 +113,6 @@
           <a class="text-1000" href="#!">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart me-3"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           </a>
-          <a
-            class="dropdown-toggle d-flex align-items-center hidden-arrow"
-            href="#"
-            id="navbarDropdownMenuLink"
-            role="button"
-            data-mdb-toggle="dropdown"
-            aria-expanded="false">
-            <img
-              src="{{ profile.picture.url }}"
-              class="rounded-circle me-1"
-              height="25"
-              alt=""
-              loading="lazy"
-            />
-            <span class="text-muted">{{ profile.user.username }}</span>
-          </a>
-          <ul
-            class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="navbarDropdownMenuLink">
-            <li>
-              <a class="dropdown-item" href="{% url 'perfiles:perfil' user.username %}">{% translate "My profile" %}</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'perfiles:edit_profile' %}">{% translate "Edit profile" %}</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'perfiles:direcciones' %}">{% translate "Add address" %}</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'account_logout' %}">{% translate "Log out" %}</a>
-            </li>
-          </ul>
         </form>
       {% else %}
         <form class="d-flex">

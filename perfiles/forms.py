@@ -59,7 +59,12 @@ class UserEditForm(forms.ModelForm):
         self.fields['username'].required = True
 
 
-""" class UserEditExtraForm(forms.ModelForm):
+class UserEditExtraForm(forms.ModelForm):
+
+    class MPTTMeta:
+        model = Profile
+        fields = ('parent', 'picture', 'banner',
+                  'url', 'birthday', 'bio', 'phone', 'mobile',)
 
     parent = TreeNodeChoiceField(queryset=Profile.objects.all())
     picture = forms.CharField(
@@ -84,11 +89,6 @@ class UserEditForm(forms.ModelForm):
         label='Mobile', min_length=4, max_length=50, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'mobile', 'id': 'form-mobile'}))
 
-    class MPTTMeta:
-        model = Profile
-        fields = ('parent', 'picture', 'banner',
-                  'url', 'birthday', 'bio', 'phone', 'mobile',)
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['parent'].widge.attrs.update(
@@ -101,4 +101,4 @@ class UserEditForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         Profile.objects.rebuild()
-        return super(UserEditExtraForm, self).save(*args, **kwargs) """
+        return super(UserEditExtraForm, self).save(*args, **kwargs)

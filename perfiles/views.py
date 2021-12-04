@@ -3,10 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.generic import DetailView, View
 from django.views.generic.edit import FormMixin
-from django.views.generic import View, DetailView
 
-from .forms import UserAddressForm, UserEditForm
+from .forms import UserAddressForm, UserEditExtraForm, UserEditForm
 from .models import Address, Profile, UserBase
 
 User = get_user_model()
@@ -26,12 +26,42 @@ class UserProfileView(View):
         return render(request, 'perfiles/detail.html', context)
 
 
+""" @login_required
+def edit_details(request):
+
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        user_extra_form = UserEditExtraForm(
+            instance=request.user, data=request.POST)
+        print(user_form)
+        print(user_extra_form)
+
+        if user_form.is_valid() and user_extra_form.is_valid():
+            user_form.save()
+            user_extra_form.save()
+        else:
+            print('Error en la validación del formulario')
+    else:
+        user_form = UserEditForm(instance=request.user)
+        user_extra_form = UserEditExtraForm(instance=request.user)
+
+    user = get_object_or_404(UserBase, username=request.user)
+    profile = Profile.objects.get(user=user)
+
+    context = {
+        'user_form': user_form,
+        'user_extra_form': user_extra_form,
+        'profile': profile,
+    }
+
+    return render(request, 'perfiles/edit_profile.html', context) """
+
+
 @login_required
 def edit_details(request):
 
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
-        print(user_form)
 
         if user_form.is_valid():
             user_form.save()
@@ -51,7 +81,6 @@ def edit_details(request):
     return render(request, 'perfiles/edit_profile.html', context)
 
 
-"""
 @login_required
 def edit_extra_details(request):
 
@@ -69,7 +98,7 @@ def edit_extra_details(request):
         user_extra_form = UserEditExtraForm(instance=request.user)
 
     return render(request,
-                  'perfiles/edit_details.html', {'user_extra_form': user_extra_form}) """
+                  'perfiles/edit_profile.html', {'user_extra_form': user_extra_form})
 
 # Addresses
 
