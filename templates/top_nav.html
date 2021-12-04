@@ -88,6 +88,9 @@
               <a class="dropdown-item" href="{% url 'perfiles:perfil' user.username %}">{% translate "My profile" %}</a>
             </li>
             <li>
+              <a class="dropdown-item" href="{% url 'perfiles:edit_profile' %}">{% translate "Edit profile" %}</a>
+            </li>
+            <li>
               <a class="dropdown-item" href="{% url 'perfiles:direcciones' %}">{% translate "Add address" %}</a>
             </li>
             <li>

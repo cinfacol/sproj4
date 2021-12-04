@@ -39,11 +39,11 @@ class UserEditForm(forms.ModelForm):
             attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email', 'readonly': 'readonly'}))
 
     username = forms.CharField(
-        label='Firstname', min_length=4, max_length=50, widget=forms.TextInput(
+        label='Username', min_length=4, max_length=50, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Username', 'id': 'form-username', 'readonly': 'readonly'}))
 
     first_name = forms.CharField(
-        label='Username', min_length=4, max_length=50, widget=forms.TextInput(
+        label='First name', min_length=4, max_length=50, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Firstname', 'id': 'form-firstname'}))
 
     last_name = forms.CharField(
@@ -57,10 +57,9 @@ class UserEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].required = True
-        self.fields['email'].required = True
 
 
-class UserEditExtraForm(forms.ModelForm):
+""" class UserEditExtraForm(forms.ModelForm):
 
     parent = TreeNodeChoiceField(queryset=Profile.objects.all())
     picture = forms.CharField(
@@ -85,7 +84,7 @@ class UserEditExtraForm(forms.ModelForm):
         label='Mobile', min_length=4, max_length=50, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'mobile', 'id': 'form-mobile'}))
 
-    class Meta:
+    class MPTTMeta:
         model = Profile
         fields = ('parent', 'picture', 'banner',
                   'url', 'birthday', 'bio', 'phone', 'mobile',)
@@ -102,4 +101,4 @@ class UserEditExtraForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         Profile.objects.rebuild()
-        return super(UserEditExtraForm, self).save(*args, **kwargs)
+        return super(UserEditExtraForm, self).save(*args, **kwargs) """

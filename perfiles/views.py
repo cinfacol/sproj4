@@ -1,11 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.generic import View
+from django.views.generic.edit import FormMixin
+from django.views.generic import View, DetailView
 
-from .forms import UserAddressForm, UserEditExtraForm, UserEditForm
+from .forms import UserAddressForm, UserEditForm
 from .models import Address, Profile, UserBase
 
 User = get_user_model()
@@ -30,9 +31,12 @@ def edit_details(request):
 
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
+        print(user_form)
 
         if user_form.is_valid():
             user_form.save()
+        else:
+            print('Error en la validación del formulario')
     else:
         user_form = UserEditForm(instance=request.user)
 
@@ -44,24 +48,28 @@ def edit_details(request):
         'profile': profile,
     }
 
-    return render(request, 'perfiles/edit_details.html', context)
+    return render(request, 'perfiles/edit_profile.html', context)
 
 
+"""
 @login_required
 def edit_extra_details(request):
+
     if request.method == 'POST':
         user_extra_form = UserEditExtraForm(
             instance=request.user, data=request.POST)
+        print(user_extra_form)
 
         if user_extra_form.is_valid():
             user_extra_form.save()
         else:
+            print('User_extra_form is not valid')
             raise('Not Valid Form')
     else:
         user_extra_form = UserEditExtraForm(instance=request.user)
 
     return render(request,
-                  'perfiles/edit_details.html', {'user_extra_form': user_extra_form})
+                  'perfiles/edit_details.html', {'user_extra_form': user_extra_form}) """
 
 # Addresses
 

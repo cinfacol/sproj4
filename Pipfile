@@ -16,6 +16,7 @@ autopep8 = "*"
 idna = "*"
 mysqlclient = "*"
 django-choices = "*"
+django-betterforms = "*"
 
 [dev-packages]
 
