@@ -1,5 +1,6 @@
 from django.contrib.auth import views
 from django.urls import path
+
 from . import views
 from .views import UserProfileView
 
@@ -14,6 +15,7 @@ urlpatterns = [
     path("addresses/set_default/<slug:id>/",
          views.set_default, name="set_default"),
     path("edit/", views.edit_details, name="edit_profile"),
-    path('<username>/', UserProfileView.as_view(), name="perfil"),
-
+    path("edit_extra/", views.edit_extra_details,
+         name="edit_extra_profile"),
+    path('<username>/', UserProfileView.as_view(), name="perfil")
 ]

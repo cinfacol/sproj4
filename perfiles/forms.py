@@ -47,7 +47,7 @@ class UserEditForm(forms.ModelForm):
             attrs={'class': 'form-control mb-3', 'placeholder': 'Firstname', 'id': 'form-firstname'}))
 
     last_name = forms.CharField(
-        label='Last Name', min_length=4, max_length=50, widget=forms.TextInput(
+        label='Last Name', min_length=4, max_length=50, required=False, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Lastname', 'id': 'form-lastname'}))
 
     class Meta:
@@ -61,43 +61,40 @@ class UserEditForm(forms.ModelForm):
 
 class UserEditExtraForm(forms.ModelForm):
 
-    class MPTTMeta:
-        model = Profile
-        fields = ('parent', 'picture', 'banner',
-                  'url', 'birthday', 'bio', 'phone', 'mobile',)
-
-    parent = TreeNodeChoiceField(queryset=Profile.objects.all())
-    picture = forms.CharField(
-        label='Picture', min_length=4, max_length=50, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Picture', 'id': 'form-picture'}))
-    banner = forms.CharField(
-        label='Banner', min_length=4, max_length=50, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Banner', 'id': 'form-banner'}))
-    url = forms.CharField(
-        label='Url', min_length=4, max_length=50, widget=forms.TextInput(
+    parent = TreeNodeChoiceField(
+        queryset=Profile.objects.all(), label='parent')
+    picture = forms.ImageField(
+        label='Profile Picture', required=False, widget=forms.FileInput)
+    banner = forms.ImageField(label='Profile Banner',
+                              required=False, widget=forms.FileInput)
+    url = forms.URLField(
+        label='Website Url', max_length=50, required=False, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Url', 'id': 'form-url'}))
     birthday = forms.CharField(
         label='Birthday', min_length=4, max_length=50, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Birthday', 'id': 'form-birthday'}))
     bio = forms.CharField(
-        label='Bio', min_length=4, max_length=50, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Bio', 'id': 'form-bio'}))
+        label='Bio', min_length=4, max_length=50, required=False, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Biografía', 'id': 'form-bio'}))
     phone = forms.CharField(
         label='Phone', min_length=4, max_length=50, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Phone', 'id': 'form-phone'}))
     mobile = forms.CharField(
-        label='Mobile', min_length=4, max_length=50, widget=forms.TextInput(
+        label='Mobile', min_length=4, max_length=50, required=False, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'mobile', 'id': 'form-mobile'}))
+
+    class Meta:
+        model = Profile
+        fields = ('parent', 'picture', 'banner',
+                  'url', 'birthday', 'bio', 'phone', 'mobile',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['parent'].widge.attrs.update(
+        self.fields['parent'].widget.attrs.update(
             {'class': 'd-none'}
         )
         self.fields['parent'].label = ''
         self.fields['parent'].required = False
-        self.fields['picture'].required = True
-        self.fields['phone'].required = True
 
     def save(self, *args, **kwargs):
         Profile.objects.rebuild()

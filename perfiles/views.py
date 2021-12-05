@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import (get_object_or_404, redirect, render)
 from django.urls import reverse
 from django.views.generic import DetailView, View
-from django.views.generic.edit import FormMixin
+from mptt.exceptions import InvalidMove
+from mptt.forms import MoveNodeForm
 
 from .forms import UserAddressForm, UserEditExtraForm, UserEditForm
 from .models import Address, Profile, UserBase
@@ -24,37 +25,6 @@ class UserProfileView(View):
             "addresses": addresses,
         }
         return render(request, 'perfiles/detail.html', context)
-
-
-""" @login_required
-def edit_details(request):
-
-    if request.method == 'POST':
-        user_form = UserEditForm(instance=request.user, data=request.POST)
-        user_extra_form = UserEditExtraForm(
-            instance=request.user, data=request.POST)
-        print(user_form)
-        print(user_extra_form)
-
-        if user_form.is_valid() and user_extra_form.is_valid():
-            user_form.save()
-            user_extra_form.save()
-        else:
-            print('Error en la validación del formulario')
-    else:
-        user_form = UserEditForm(instance=request.user)
-        user_extra_form = UserEditExtraForm(instance=request.user)
-
-    user = get_object_or_404(UserBase, username=request.user)
-    profile = Profile.objects.get(user=user)
-
-    context = {
-        'user_form': user_form,
-        'user_extra_form': user_extra_form,
-        'profile': profile,
-    }
-
-    return render(request, 'perfiles/edit_profile.html', context) """
 
 
 @login_required
@@ -83,22 +53,28 @@ def edit_details(request):
 
 @login_required
 def edit_extra_details(request):
-
+    user_extra_form = UserEditExtraForm(
+        instance=request.user, data=request.POST)
     if request.method == 'POST':
-        user_extra_form = UserEditExtraForm(
-            instance=request.user, data=request.POST)
+        form = MoveNodeForm(user_extra_form, request.POST)
         print(user_extra_form)
 
-        if user_extra_form.is_valid():
-            user_extra_form.save()
-        else:
-            print('User_extra_form is not valid')
-            raise('Not Valid Form')
+        if form.is_valid():
+            try:
+                user_extra_form = form.save()
+                return HttpResponseRedirect(user_extra_form.get_absolute_url())
+            except InvalidMove:
+                pass
     else:
-        user_extra_form = UserEditExtraForm(instance=request.user)
+        form = MoveNodeForm(user_extra_form)
 
-    return render(request,
-                  'perfiles/edit_profile.html', {'user_extra_form': user_extra_form})
+    context = {
+        'form': form,
+        'user_extra_form': user_extra_form,
+        'user_extra_tree': user_extra_form.objects.all(),
+    }
+
+    return render('perfiles/edit_extra_profile.html', context)
 
 # Addresses
 
