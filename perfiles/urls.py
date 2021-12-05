@@ -14,8 +14,6 @@ urlpatterns = [
          views.delete_address, name="delete_address"),
     path("addresses/set_default/<slug:id>/",
          views.set_default, name="set_default"),
-    path("edit/", views.edit_details, name="edit_profile"),
-    path("edit_extra/", views.edit_extra_details,
-         name="edit_extra_profile"),
+    path("edit_profile/", views.edit_profile, name="edit_profile"),
     path('<username>/', UserProfileView.as_view(), name="perfil")
 ]

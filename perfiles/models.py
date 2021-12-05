@@ -12,7 +12,6 @@ from django.dispatch import receiver
 from django_countries.fields import CountryField
 from djchoices import ChoiceItem, DjangoChoices
 from djchoices.choices import ChoiceItem
-from mptt.models import MPTTModel, TreeForeignKey
 
 
 def user_directory_path_profile(instance, filename):
@@ -112,12 +111,10 @@ class VerificationType(DjangoChoices):
     verified = ChoiceItem('verified', 'Verificado')
 
 
-class Profile(MPTTModel):
+class Profile(models.Model):
 
     user = models.OneToOneField(
         UserBase, on_delete=models.CASCADE, related_name='profile')
-    parent = TreeForeignKey('self', on_delete=models.CASCADE,
-                            null=True, blank=True, related_name='children')
     picture = models.ImageField(
         default='users/user_default_profile.png', upload_to=user_directory_path_profile)
     banner = models.ImageField(
@@ -132,8 +129,8 @@ class Profile(MPTTModel):
     phone = models.CharField(max_length=50)
     mobile = models.CharField(max_length=50, null=True, blank=True)
 
-    class MPTTMeta:
-        order_insertion_by = ['user']
+    class Meta:
+        verbose_name = 'Usuario'
 
     def __str__(self):
         return self.user.username

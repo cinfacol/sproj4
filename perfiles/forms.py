@@ -1,5 +1,4 @@
 from django import forms
-from mptt.forms import TreeNodeChoiceField
 
 from .models import Address, Profile, UserBase
 
@@ -32,7 +31,7 @@ class UserAddressForm(forms.ModelForm):
         )
 
 
-class UserEditForm(forms.ModelForm):
+class UserEditAccountForm(forms.ModelForm):
 
     email = forms.EmailField(
         label='Account email (can not be changed)', max_length=200, widget=forms.TextInput(
@@ -59,20 +58,23 @@ class UserEditForm(forms.ModelForm):
         self.fields['username'].required = True
 
 
-class UserEditExtraForm(forms.ModelForm):
+YEARS = [x for x in range(1940, 2021)]
 
-    parent = TreeNodeChoiceField(
-        queryset=Profile.objects.all(), label='parent')
+
+class UserEditProfileForm(forms.ModelForm):
+    """
     picture = forms.ImageField(
-        label='Profile Picture', required=False, widget=forms.FileInput)
-    banner = forms.ImageField(label='Profile Banner',
-                              required=False, widget=forms.FileInput)
+        label='Profile Picture', required=False, widget=forms.FileInput(
+            attrs={'class': 'form-control mb-3', 'id': 'picture-url'}))
+    banner = forms.ImageField(
+        label='Profile Banner', required=False, widget=forms.FileInput(
+            attrs={'class': 'form-control mb-3', 'id': 'banner-url'}))
     url = forms.URLField(
         label='Website Url', max_length=50, required=False, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Url', 'id': 'form-url'}))
-    birthday = forms.CharField(
-        label='Birthday', min_length=4, max_length=50, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Birthday', 'id': 'form-birthday'}))
+    birthday = forms.DateField(
+        label='Birthday', required=False, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'dd/mm/AAAA', 'id': 'form-birthday'})) """
     bio = forms.CharField(
         label='Bio', min_length=4, max_length=50, required=False, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Biografía', 'id': 'form-bio'}))
@@ -85,17 +87,8 @@ class UserEditExtraForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('parent', 'picture', 'banner',
-                  'url', 'birthday', 'bio', 'phone', 'mobile',)
+        fields = ('bio', 'phone', 'mobile',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['parent'].widget.attrs.update(
-            {'class': 'd-none'}
-        )
-        self.fields['parent'].label = ''
-        self.fields['parent'].required = False
-
-    def save(self, *args, **kwargs):
-        Profile.objects.rebuild()
-        return super(UserEditExtraForm, self).save(*args, **kwargs)
+        self.fields['phone'].required = True

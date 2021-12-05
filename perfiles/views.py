@@ -2,12 +2,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import (get_object_or_404, redirect, render)
+from django.contrib import messages
 from django.urls import reverse
-from django.views.generic import DetailView, View
-from mptt.exceptions import InvalidMove
-from mptt.forms import MoveNodeForm
+from django.views.generic import View
 
-from .forms import UserAddressForm, UserEditExtraForm, UserEditForm
+from .forms import UserAddressForm, UserEditProfileForm, UserEditAccountForm
 from .models import Address, Profile, UserBase
 
 User = get_user_model()
@@ -28,17 +27,18 @@ class UserProfileView(View):
 
 
 @login_required
-def edit_details(request):
+def edit_account(request):
 
     if request.method == 'POST':
-        user_form = UserEditForm(instance=request.user, data=request.POST)
+        user_form = UserEditAccountForm(
+            instance=request.user, data=request.POST)
 
         if user_form.is_valid():
             user_form.save()
         else:
             print('Error en la validación del formulario')
     else:
-        user_form = UserEditForm(instance=request.user)
+        user_form = UserEditAccountForm(instance=request.user)
 
     user = get_object_or_404(UserBase, username=request.user)
     profile = Profile.objects.get(user=user)
@@ -48,33 +48,43 @@ def edit_details(request):
         'profile': profile,
     }
 
-    return render(request, 'perfiles/edit_profile.html', context)
+    return render(request, 'perfiles/edit_account.html', context)
 
 
 @login_required
-def edit_extra_details(request):
-    user_extra_form = UserEditExtraForm(
-        instance=request.user, data=request.POST)
-    if request.method == 'POST':
-        form = MoveNodeForm(user_extra_form, request.POST)
-        print(user_extra_form)
+def edit_profile(request):
 
-        if form.is_valid():
-            try:
-                user_extra_form = form.save()
-                return HttpResponseRedirect(user_extra_form.get_absolute_url())
-            except InvalidMove:
-                pass
+    if request.method == 'POST':
+        user_form = UserEditAccountForm(
+            instance=request.user, data=request.POST)
+        profile_form = UserEditProfileForm(
+            instance=request.user, data=request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            profile.save()
+            messages.success(
+                request,  'Your profile has been successfully updated')
+        else:
+            messages.error(
+                request,  'Your profile can not be updated')
     else:
-        form = MoveNodeForm(user_extra_form)
+        user_form = UserEditAccountForm(instance=request.user)
+        profile_form = UserEditProfileForm(instance=request.user)
+
+    user = get_object_or_404(UserBase, username=request.user)
+    profile = Profile.objects.get(user=user)
 
     context = {
-        'form': form,
-        'user_extra_form': user_extra_form,
-        'user_extra_tree': user_extra_form.objects.all(),
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'profile': profile
     }
 
-    return render('perfiles/edit_extra_profile.html', context)
+    return render(request, 'perfiles/edit_profile.html', context)
 
 # Addresses
 
