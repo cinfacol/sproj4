@@ -1,15 +1,19 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import (get_object_or_404, redirect, render)
-from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import View
 
-from .forms import UserAddressForm, UserEditProfileForm, UserEditAccountForm
+from .forms import UserAddressForm, UserEditAccountForm, UserEditProfileForm
 from .models import Address, Profile, UserBase
 
-User = get_user_model()
+app_name = "perfiles"
+
+# User = get_user_model()
+""" User = get_user_model(Profile)
+print(User) """
 
 
 class UserProfileView(View):
@@ -26,7 +30,7 @@ class UserProfileView(View):
         return render(request, 'perfiles/detail.html', context)
 
 
-@login_required
+""" @login_required
 def edit_account(request):
 
     if request.method == 'POST':
@@ -48,17 +52,19 @@ def edit_account(request):
         'profile': profile,
     }
 
-    return render(request, 'perfiles/edit_account.html', context)
+    return render(request, 'perfiles/edit_account.html', context) """
 
 
 @login_required
 def edit_profile(request):
 
+    usuario = get_object_or_404(Profile, user=request.user)
+
     if request.method == 'POST':
         user_form = UserEditAccountForm(
             instance=request.user, data=request.POST)
         profile_form = UserEditProfileForm(
-            instance=request.user, data=request.POST)
+            data=request.POST, files=request.FILES, instance=usuario)
 
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
@@ -73,15 +79,12 @@ def edit_profile(request):
                 request,  'Your profile can not be updated')
     else:
         user_form = UserEditAccountForm(instance=request.user)
-        profile_form = UserEditProfileForm(instance=request.user)
-
-    user = get_object_or_404(UserBase, username=request.user)
-    profile = Profile.objects.get(user=user)
+        profile_form = UserEditProfileForm(instance=usuario)
 
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
-        'profile': profile
+        'profile': usuario
     }
 
     return render(request, 'perfiles/edit_profile.html', context)
@@ -111,7 +114,14 @@ def add_address(request):
             return HttpResponseRedirect(reverse("perfiles:direcciones"))
     else:
         address_form = UserAddressForm()
-    return render(request, "perfiles/edit_addresses.html", {"form": address_form})
+
+    profile = Profile.objects.get(user=request.user)
+    context = {
+        "form": address_form,
+        'profile': profile
+    }
+
+    return render(request, "perfiles/edit_addresses.html", context)
 
 
 @login_required

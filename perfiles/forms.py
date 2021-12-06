@@ -1,4 +1,6 @@
 from django import forms
+from django.forms.widgets import NumberInput
+import datetime
 
 from .models import Address, Profile, UserBase
 
@@ -34,7 +36,7 @@ class UserAddressForm(forms.ModelForm):
 class UserEditAccountForm(forms.ModelForm):
 
     email = forms.EmailField(
-        label='Account email (can not be changed)', max_length=200, widget=forms.TextInput(
+        label='Account email and username (can not be changed)', max_length=200, widget=forms.EmailInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email', 'readonly': 'readonly'}))
 
     username = forms.CharField(
@@ -58,11 +60,14 @@ class UserEditAccountForm(forms.ModelForm):
         self.fields['username'].required = True
 
 
-YEARS = [x for x in range(1940, 2021)]
+GENDER_CHOICE = (
+    ('male', 'Hombre'),
+    ('female', 'Mujer'),
+)
 
 
 class UserEditProfileForm(forms.ModelForm):
-    """
+
     picture = forms.ImageField(
         label='Profile Picture', required=False, widget=forms.FileInput(
             attrs={'class': 'form-control mb-3', 'id': 'picture-url'}))
@@ -73,13 +78,16 @@ class UserEditProfileForm(forms.ModelForm):
         label='Website Url', max_length=50, required=False, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Url', 'id': 'form-url'}))
     birthday = forms.DateField(
-        label='Birthday', required=False, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'dd/mm/AAAA', 'id': 'form-birthday'})) """
+        label='Birthday', required=False, initial=datetime.date.today, widget=NumberInput(
+            attrs={'class': 'form-control mb-3', 'type': 'date', 'id': 'form-birthday'}))
+    gender = forms.ChoiceField(
+        label='Gender', required=False, choices=GENDER_CHOICE, widget=forms.Select(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Género', 'id': 'form-gender'}))
     bio = forms.CharField(
-        label='Bio', min_length=4, max_length=50, required=False, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Biografía', 'id': 'form-bio'}))
+        label='Bio', min_length=4, max_length=250, required=False, widget=forms.Textarea(
+            attrs={'class': 'form-control mb-3', 'rows': 3, 'placeholder': 'Biografía', 'id': 'form-bio'}))
     phone = forms.CharField(
-        label='Phone', min_length=4, max_length=50, widget=forms.TextInput(
+        label='Phone *', min_length=4, max_length=50, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Phone', 'id': 'form-phone'}))
     mobile = forms.CharField(
         label='Mobile', min_length=4, max_length=50, required=False, widget=forms.TextInput(
@@ -87,7 +95,8 @@ class UserEditProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('bio', 'phone', 'mobile',)
+        fields = ('picture', 'banner', 'url',
+                  'birthday', 'gender', 'bio', 'phone', 'mobile',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

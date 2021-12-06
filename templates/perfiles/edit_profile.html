@@ -60,15 +60,17 @@
           {{ user_form.first_name }}
           <label class="small font-weight-bold">{{ user_form.last_name.label }}</label>
           {{ user_form.last_name }}
-{% comment %}
+
           <label class="small font-weight-bold">{{ profile_form.picture.label }}</label>
           {{ profile_form.picture }}
           <label class="small font-weight-bold">{{ profile_form.banner.label }}</label>
           {{ profile_form.banner }}
           <label class="small font-weight-bold">{{ profile_form.url.label }}</label>
           {{ profile_form.url }}
-          <label class="small font-weight-bold">{{ profile_form.birthday.label }}</label>
-          {{ profile_form.birthday }} {% endcomment %}
+         <label class="small font-weight-bold">{{ profile_form.birthday.label }}</label>
+          {{ profile_form.birthday }}
+          <label class="small font-weight-bold">{{ profile_form.gender.label }}</label>
+          {{ profile_form.gender }}
           <label class="small font-weight-bold">{{ profile_form.bio.label }}</label>
           {{ profile_form.bio }}
           <label class="small font-weight-bold">{{ profile_form.phone.label }}</label>
