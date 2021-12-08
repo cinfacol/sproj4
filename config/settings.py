@@ -35,6 +35,8 @@ INSTALLED_APPS = [
 
     'perfiles.apps.PerfilesConfig',
     'store.apps.StoreConfig',
+    'products.apps.ProductsConfig',
+    'inventario.apps.InventarioConfig',
 ]
 
 SITE_ID = 1

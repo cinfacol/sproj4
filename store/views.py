@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
+from products.models import Category
 
 
 class HomeView(generic.ListView):

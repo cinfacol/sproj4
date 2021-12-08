@@ -21,6 +21,7 @@ class UserProfileView(View):
         user = get_object_or_404(UserBase, username=username)
         profile = Profile.objects.get(user=user)
         addresses = Address.objects.filter(user=user, default=True)
+        print(profile.picture)
 
         context = {
             'user': user,
