@@ -30,7 +30,7 @@ class ProductListView(generic.ListView):
         return render(request, "products/product_list.html", context)
 
 
-class ProductDetailView(generic.DetailView):
+class MediaDetailView(generic.DetailView):
 
     model = Media
     template_name = "products/product_detail.html"
