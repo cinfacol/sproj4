@@ -17,41 +17,44 @@
 {% endblock left_sidebar %}
 
 {% block content %}
-  <main style="background-color:#eee;">
+  <main>
     <!-- Carousel wrapper -->
-    {% include 'carousel.html' %}
+    {% comment %} {% include 'carousel.html' %} {% endcomment %}
     <!-- Carousel wrapper -->
 
-    <section style="background-color: #eee;">
-      <div class="container py-5">
+    <section style="background-color: #eeefff;" class="">
+      <div class="container">
         <div class="d-flex justify-content-start align-items-center">
           <h2>Productos</h2>
           <a class="mx-3" href="#">Ver todos</a>
         </div>
-
-        <div class="row">
-          {% for product in products %}
-            <div class="col-md-3 col-lg-2 mb-4">
-              <div class="card h-100">
-                <a href="">
-                  <img
-                    src="{{ product.image.url }}"
-                    class="card-img-top"
-                    alt="{{ product.alt_text }}"
-                  />
-                </a>
-                <div class="card-body">
-                  <a href="">
-                    <h5 class="card-title">{{ product.product.name }}</h5>
+        {% if media %}
+          <div class="row">
+            {% for product in media %}
+              <div class="col-md-3 col-lg-2 mb-4">
+                <div class="card h-100">
+                  <a href="{% url 'products:product_detail' product.id %}">
+                    <img
+                      src="{{ product.image.url }}"
+                      class="card-img-top"
+                      alt="{{ product.alt_text }}"
+                    />
                   </a>
-                  <p class="card-text">
-                    {{ product.product.description}}
-                  </p>
+                  <div class="card-body d-flex align-items-end">
+                    <a href="{{ media.get_absolute_url }}">
+                      <h5 class="card-title">{{ product.product.name }}</h5>
+                    </a>
+                    {% comment %} <p class="card-text">
+                      {{ product.product.description}}
+                    </p> {% endcomment %}
+                  </div>
                 </div>
               </div>
-            </div>
-          {% endfor %}
-        </div> <!-- /row -->
+            {% endfor %}
+          </div> <!-- /row -->
+        {% else %}
+          <p class="alert alert-info">No hay productos disponibles</p>
+        {% endif %}
       </div>
     </section>
   </main>

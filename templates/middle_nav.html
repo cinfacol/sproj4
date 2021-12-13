@@ -19,7 +19,7 @@
       <div class="collapse navbar-collapse" id="navbarTogglerCat">
         <a class="navbar-brand" href="#">Categorías:</a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-         {% comment %} {% recursetree categories %}
+         {% recursetree categories %}
             {% if node.is_leaf_node %}
               <li class="nav-item">
                 <a class="nav-link" href="{{ node.get_absolute_url }}">{{ node.name|title }}</a>
@@ -43,7 +43,7 @@
                   </ul>
               </li>
             {% endif %}
-          {% endrecursetree %} {% endcomment %}
+          {% endrecursetree %}
         </ul>
 
         <div class="d-flex align-items-end">

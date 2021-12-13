@@ -1,39 +1,44 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from perfiles.models import Profile
 
-from .models import Media, Product
+from .models import Category, Media, Product
 
-namespace = 'products'
+namespace = "products"
 
 
 class ProductListView(generic.ListView):
-    model = Product
+
     model = Media
 
     def get(self, request):
-        products = Media.objects.all()
+        media = Media.objects.all()
+        # products = Product.image_product # reverse muchos a uno entre Product db y Media db
 
         context = {
-            'products': products,
+            "media": media,
         }
 
         if request.user.is_authenticated:
             profile = Profile.objects.get(user=request.user)
-            print(products)
 
             context = {
-                'products': products,
-                'profile': profile,
+                "media": media,
+                "profile": profile,
             }
 
-        return render(request, 'products/product_list.html', context)
+        return render(request, "products/product_list.html", context)
 
 
 class ProductDetailView(generic.DetailView):
 
-    def get(self, request):
+    model = Media
+    template_name = "products/product_detail.html"
 
-        context = {}
+    if Profile.objects.get().user.is_authenticated:
 
-        return render(request, 'products/product_detail.html', context)
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            context["profile"] = Profile.objects.get()
+
+            return context

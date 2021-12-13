@@ -41,8 +41,8 @@ class Category(MPTTModel):
         help_text=_("format: not required"),
     )
 
-    def get_absolute_url(self):
-        return reverse("store:category_list", args=[self.slug])
+    """ def get_absolute_url(self):
+        return reverse("store:category_list", args=[self.slug]) """
 
     class MPTTMeta:
         order_insertion_by = ["name"]
@@ -96,13 +96,14 @@ class Type(models.Model):
 
 
 class Product(models.Model):
-    web_id = models.CharField(
-        max_length=50,
-        unique=True,
+
+    name = models.CharField(
+        max_length=255,
+        unique=False,
         null=False,
         blank=False,
-        verbose_name=_("product website ID"),
-        help_text=_("format: required, unique"),
+        verbose_name=_("product name"),
+        help_text=_("format: required, max-255"),
     )
     slug = models.SlugField(
         max_length=255,
@@ -114,13 +115,13 @@ class Product(models.Model):
             "format: required, letters, numbers, underscores or hyphens"
         ),
     )
-    name = models.CharField(
-        max_length=255,
-        unique=False,
+    web_id = models.CharField(
+        max_length=50,
+        unique=True,
         null=False,
         blank=False,
-        verbose_name=_("product name"),
-        help_text=_("format: required, max-255"),
+        verbose_name=_("product website ID"),
+        help_text=_("format: required, unique"),
     )
     category = TreeManyToManyField(Category)
     brand = models.ForeignKey(
@@ -215,7 +216,7 @@ class Product(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("product_detail", kwargs={"pk": self.pk})
+        return reverse("product:product_detail", kwargs={"pk": self.pk})
 
     class Meta:
         verbose_name_plural = 'Products'
@@ -309,6 +310,9 @@ class Media(models.Model):
         verbose_name=_("date sub-product created"),
         help_text=_("format: Y-m-d H:M:S"),
     )
+
+    def get_absolute_url(self):
+        return reverse("product:products/product_detail", args=[self.slug])
 
     class Meta:
         verbose_name = _("product image")

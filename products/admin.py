@@ -31,14 +31,21 @@ class CategoryAdmin(MPTTModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
+@admin.register(Media)
+class MediaAdmin(admin.ModelAdmin):
+    list_display = ['alt_text', 'image', 'created_at', 'updated_at']
+
+
+class MediaInline(admin.TabularInline):
+    model = Media
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    inlines = [
+        MediaInline,
+    ]
     list_display = ['name', 'slug', 'brand', 'retail_price',
                     'store_price', 'discount_price', 'created_at']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('name',)}
-
-
-@admin.register(Media)
-class MediaAdmin(admin.ModelAdmin):
-    list_display = ['alt_text', 'image', 'created_at', 'updated_at']
