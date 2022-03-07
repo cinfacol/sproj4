@@ -6,7 +6,7 @@
 
 {% block head_title %}
   {% if user.is_authenticated %}
-    {% translate "Home" %} - {{ user.get_username }}
+    {% translate "Home" %} - {{ profile.user.username}}
   {% else %}
     {% translate "Home" %}
   {% endif %}
@@ -25,10 +25,10 @@
     <section style="background-color: #eee;">
       <div class="container py-5">
       <div class="d-flex justify-content-start align-items-center">
-          <h2>Productos</h2>
-          <a class="mx-3" href="#">Ver todos</a>
+          <h2>Publicaciones</h2>
+          <a class="mx-3" href="#">Ver todas</a>
         </div>
-        <div class="row">
+        {% comment %} <div class="row">
           {% for post in posts %}
             <div class="col-md-6 col-lg-3 mb-4">
               <div class="card h-100">
@@ -86,7 +86,7 @@
               </div>
             </div>
           {% endfor %}
-        </div> <!-- /row -->
+        </div> <!-- /row --> {% endcomment %}
       </div>
     </section>
   </main>

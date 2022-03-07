@@ -6,9 +6,9 @@
 
 {% block head_title %}
   {% if user.is_authenticated %}
-    {% translate "Home" %} - {{ user.get_username }}
+    {% translate "Products list" %} - {{ profile.user.username }}
   {% else %}
-    {% translate "Home" %}
+    {% translate "Products list" %}
   {% endif %}
 {% endblock head_title %}
 

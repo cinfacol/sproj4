@@ -6,9 +6,9 @@
 {% load i18n %}
 {% block head_title %}
 {% if user.is_authenticated %}
-  {% translate "Home" %} - {{ user.get_username }}
+  {{ object.product.name }} - {{ user.get_username }}
 {% else %}
-  {% translate "Home" %}
+  {{ object.product.name }}
 {% endif %}
 {% endblock head_title %}
 
