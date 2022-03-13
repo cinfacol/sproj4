@@ -6,7 +6,7 @@
 
 {% block head_title %}
   {% if user.is_authenticated %}
-    {% translate "Home" %} - {{ profile.user.username}}
+    {% translate "Home" %} - {{ user.get_username }}
   {% else %}
     {% translate "Home" %}
   {% endif %}
@@ -24,9 +24,9 @@
 
     <section style="background-color: #eee;">
       <div class="container py-5">
-        <div class="d-flex justify-content-start align-items-center">
-          <h2>Publicaciones</h2>
-          <a class="mx-3" href="#">Ver todas</a>
+      <div class="d-flex justify-content-start align-items-center">
+          <h2>{{ category.name}}</h2>
+          <a class="mx-3" href="/">Todas las Categorías</a>
         </div>
         <div class="row">
           {% for post in posts %}
@@ -52,12 +52,12 @@
                 <div class="card-body">
                   <div class="d-flex justify-content-between">
                     <p class="small">
-                      <a href="#!" class="text-muted">{{ post.inventory.product.type.name }}</a>
+                      <a href="#!" class="text-muted">{{ post.inventory.product_type }}</a>
                     </p>
-                    {% if post.inventory.product.discount_price %}
-                      <p class="small text-danger">
-                        <s>${{ post.inventory.product.store_price|intcomma }}</s>
-                      </p>
+                    {% if post.inventory.discount_price %}
+                    <p class="small text-danger">
+                      <s>${{ post.inventory.store_price|intcomma }}</s>
+                    </p>
                     {% endif %}
                   </div>
 
@@ -65,10 +65,10 @@
                     <a href="{{ post.get_absolute_url }}" class="text-decorations-none">
                       <h5 class="mb-0">{{ post.title }}</h5>
                     </a>
-                    {% if post.inventory.product.discount_price %}
-                      <h5 class="text-dark mb-0">${{ post.inventory.product.discount_price|intcomma }}</h5>
+                    {% if post.inventory.discount_price %}
+                      <h5 class="text-dark mb-0">${{ post.inventory.discount_price|intcomma }}</h5>
                     {% else %}
-                      <h5 class="text-dark mb-0">${{ post.inventory.product.store_price|intcomma }}</h5>
+                      <h5 class="text-dark mb-0">${{ post.inventory.store_price|intcomma }}</h5>
                     {% endif %}
                   </div>
 

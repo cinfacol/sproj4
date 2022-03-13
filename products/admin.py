@@ -2,6 +2,12 @@ from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
 from .models import Category, Product, Media, Type, Brand, Attribute, AttributeValue
+from inventario.models import Inventory
+
+
+@admin.register(Inventory)
+class InventoryAdmin(admin.ModelAdmin):
+    list_display = ['product', 'sku']
 
 
 @admin.register(Attribute)
