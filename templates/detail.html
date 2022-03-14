@@ -20,8 +20,8 @@
           <div class="row g-0">
             <div class="col-md-5 d-flex justify-content-end">
               <img
-                src="{{ product.image.image.url }}"
-                alt="{{ product.image.alt_text }}"
+                src="{{ object.image.image.url }}"
+                alt="{{ post.image.alt_text }}"
                 class="img-fluid"
               />
             </div>
@@ -29,23 +29,23 @@
               <div class="card-body">
                 <div class="mb-3 mx-4">
                   <a href="">
-                    <span class="badge  bg-warning mr-1">{{ product.get_category_display }}</span>
+                    <span class="badge  bg-warning mr-1">{{ post.get_category_display }}</span>
                     <span class="badge  bg-{{ item.get_label_display }}">{% translate "NEW" %}</span>
                   </a>
                   <p class="lead">
-                    {% if product.inventory.discount_price %}
+                    {% if post.inventory.product.discount_price %}
                     <span class="me-3">
-                      <del>${{ product.inventory.store_price|intcomma }}</del>
+                      <del>${{ post.inventory.product.store_price|intcomma }}</del>
                     </span>
-                    <span>${{ product.inventory.discount_price|intcomma }}</span>
+                    <span>${{ post.inventory.product.discount_price|intcomma }}</span>
                     {% else %}
-                    <span>${{ product.inventory.store_price|intcomma }}</span>
+                    <span>${{ post.inventory.product.store_price|intcomma }}</span>
                     {% endif %}
                   </p>
 
                   <h5 class="card-title">{% translate "Description" %}</h5>
                   <p class="card-text">
-                    {{ product.content }}
+                    {{ post.inventory.product.description }}
                   </p>
                   <form method="POST">
                     {% csrf_token %}

@@ -1,6 +1,7 @@
 from django import forms
 # from cart.models import OrderItem
 from django.contrib.auth import get_user_model
+from .models import Post
 
 User = get_user_model()
 

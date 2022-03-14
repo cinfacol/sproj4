@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'products.apps.ProductsConfig',
     'inventario.apps.InventarioConfig',
+    'cart.apps.CartConfig',
 ]
 
 SITE_ID = 1
@@ -144,6 +145,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CART_SESSION_ID = 'cart'
 
 if DEBUG is False:
     SESSION_COOKIE_SECURE = True
