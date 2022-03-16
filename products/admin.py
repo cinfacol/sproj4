@@ -1,13 +1,8 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
-from .models import Category, Product, Media, Type, Brand, Attribute, AttributeValue
-from inventario.models import Inventory
-
-
-@admin.register(Inventory)
-class InventoryAdmin(admin.ModelAdmin):
-    list_display = ['product', 'sku']
+from .models import (Attribute, AttributeValue, Brand, Category, Media,
+                     Product, Type)
 
 
 @admin.register(Attribute)
@@ -39,7 +34,7 @@ class CategoryAdmin(MPTTModelAdmin):
 
 @admin.register(Media)
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ['alt_text', 'image', 'created_at', 'updated_at']
+    list_display = ['id', 'alt_text', 'image', 'created_at', 'updated_at']
 
 
 class MediaInline(admin.TabularInline):
@@ -51,7 +46,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [
         MediaInline,
     ]
-    list_display = ['name', 'slug', 'brand', 'retail_price',
+    list_display = ['id', 'name', 'slug', 'brand', 'retail_price',
                     'store_price', 'discount_price', 'created_at']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('name',)}

@@ -1,8 +1,9 @@
 from itertools import product
 
-from django.shortcuts import get_object_or_404, redirect, redirect, render
-from products.models import Product
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
+from products.models import Product
+from store.models import Post
 
 from .cart import Cart
 from .forms import CartAddProductForm
@@ -11,10 +12,10 @@ from .forms import CartAddProductForm
 @require_POST
 def cart_add(request, product_id):
     cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(Post, id=product_id)
     form = CartAddProductForm(request.POST)
     if form.is_valid():
-        cd = form.changed_data
+        cd = form.cleaned_data
         cart.add(product=product,
                  quantity=cd['quantity'], override_quantity=cd['override'])
 

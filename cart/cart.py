@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from products.models import Product
+from store.models import Post
 
 
 class Cart(object):
@@ -20,7 +20,7 @@ class Cart(object):
         product_id = str(product.id)
         if product_id not in self.cart:
             self.cart[product_id] = {
-                'quantity': 0, 'price': str(product.price)}
+                'quantity': 0, 'price': str(product.inventory.product.store_price)}
 
         if override_quantity:
             self.cart[product_id]['quantity'] = quantity
@@ -33,14 +33,14 @@ class Cart(object):
         self.session.modified = True
 
     def remove(self, product):
-        product_id = str(product_id)
+        product_id = str(product.id)
         if product_id in self.cart:
             del self.cart[product_id]
             self.save()
 
     def __iter__(self):
         product_ids = self.cart.keys()
-        products = Product.objects.filter(id__in=product_ids)
+        products = Post.objects.filter(id__in=product_ids)
 
         cart = self.cart.copy()
         for product in products:
@@ -55,7 +55,7 @@ class Cart(object):
         return sum(item['quantity'] for item in self.cart.values())
 
     def get_total_price(self):
-        return sum(Decimal(item['price'] * item['quantity'] for item in self.cart.values()))
+        return sum(item['price'] * item['quantity'] for item in self.cart.values())
 
     def clear(self):
         del self.session[settings.CART_SESSION_ID]

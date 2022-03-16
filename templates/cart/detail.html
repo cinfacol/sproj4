@@ -10,7 +10,7 @@
 
 {% block content %}
   <h1>Shopping Cart</h1>
-  <table class='cart'>
+  <table class='table'>
     <thead>
       <tr>
         <th>Image</th>
@@ -23,14 +23,14 @@
     </thead>
     <tbody>
       {% for item in cart %}
-        {% comment %} {% with  product = item.product  %}
+        {% with  product=item.product  %}
           <tr>
             <td>
               <a href="{{ product.get_absolute_url }}">
-                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+                <img height="35" src="{% if product.image.image %}{{ product.image.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
               </a>
             </td>
-            <td> {{ product.name }} </td>
+            <td> {{ product.title }} </td>
             <td> {{ item.quantity }} </td>
             <td>
               <form action="{% url 'cart:cart_remove' product.id %}" method="post">
@@ -38,20 +38,20 @@
                 {% csrf_token %}
               </form>
             </td>
-            <td class="num">${{ item.price }}</td>
-            <td class="num">${{ item.total_price }}</td>
+            <td class="num">${{ item.price|intcomma }}</td>
+            <td class="num">${{ item.total_price|intcomma }}</td>
           </tr>
-        {% endwith %} {% endcomment %}
+        {% endwith %}
       {% endfor %}
       <tr class="total">
         <td>Total</td>
         <td colspan="4"></td>
-        {% comment %} <td class="num">${{ cart.get_total_price }}</td> {% endcomment %}
+        <td class="num">$ {{ cart.get_total_price|intcomma }}</td>
       </tr>
     </tbody>
   </table>
   <p class="text-right">
-    {% comment %} <a href="{% url 'products:product_list' %}" class="buttonlight">Continue Shopping</a> {% endcomment %}
+    <a href="{% url 'store:home' %}" class="buttonlight">Continue Shopping</a>
     <a href="#">CheckOut</a>
   </p>
 {% endblock content %}

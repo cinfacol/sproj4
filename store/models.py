@@ -1,10 +1,10 @@
-from django.db import models
 from django.conf import settings
-from django.utils import timezone
-from mptt.models import TreeManyToManyField
-from products.models import Product, Category, Media
-from inventario.models import Inventory
+from django.db import models
 from django.urls import reverse
+from django.utils import timezone
+from inventario.models import Inventory
+from mptt.models import TreeManyToManyField
+from products.models import Category, Media, Product
 
 
 class Post(models.Model):
@@ -36,7 +36,7 @@ class Post(models.Model):
     newmanager = NewManager()  # custom manager
 
     def get_absolute_url(self):
-        return reverse("store:detail", args=[self.slug])
+        return reverse("store:detail", kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ('-publish',)

@@ -1,11 +1,9 @@
 from cart.forms import CartAddProductForm
-from django.shortcuts import get_object_or_404, render, reverse
-from django.views.generic import DetailView, FormView, ListView
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView
 from products.models import Category
 
 from .models import Post
-
-# from .utils import get_or_set_order_session
 
 namespace = 'store'
 
@@ -20,11 +18,12 @@ class HomeView(ListView):
 class DetalleView(DetailView):
     template_name = 'detail.html'
     model = Post
-    # form_class = AddToCartForm
+    cart_product_form = CartAddProductForm()
 
     def get_context_data(self, *args, **kwargs):
         context = super(DetalleView, self).get_context_data(*args, **kwargs)
-        # context["post"] = self.get_object()
+        context["post"] = self.get_object()
+        context["cart_product_form"] = self.cart_product_form
 
         return context
 

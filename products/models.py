@@ -312,7 +312,7 @@ class Media(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("product:products/product_detail", args=[self.slug])
+        return reverse("products:products/product_detail", args=[self.slug])
 
     class Meta:
         verbose_name = _("product image")
