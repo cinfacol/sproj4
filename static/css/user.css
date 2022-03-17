@@ -44,4 +44,6 @@
 .dropdown-menu > li:hover > .dropdown-submenu {
   display: block;
 }
-
+.total {
+  background-color: darkgray;
+}
