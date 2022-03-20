@@ -14,6 +14,7 @@ admin.site.register(Address, list_display=(
     'residencia_address',
     'oficina_address',
     'address_type',
+    'default',
 ))
 
 admin.site.register(Profile, list_display=(

@@ -1,35 +1,40 @@
+import datetime
+
 from django import forms
 from django.forms.widgets import NumberInput
-import datetime
+from typing_extensions import Required
 
 from .models import Address, Profile, UserBase
 
 
 class UserAddressForm(forms.ModelForm):
+
     class Meta:
         model = Address
-        fields = ["user", "residencia_address",
+        fields = ["residencia_address",
                   "oficina_address", "ciudad", "departamento", "zip"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["user"].widget.attrs.update(
-            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
-        )
         self.fields["residencia_address"].widget.attrs.update(
-            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
+            {"class": "form-control mb-2 account-form",
+                "placeholder": "Tu dirección de envío"}
         )
+        self.fields["oficina_address"].required = False
         self.fields["oficina_address"].widget.attrs.update(
-            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
+            {"class": "form-control mb-2 account-form",
+                "placeholder": "Dirección de tu oficina (opcional)"}
         )
         self.fields["ciudad"].widget.attrs.update(
-            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
+            {"class": "form-control mb-2 account-form", "placeholder": "Tu ciudad"}
         )
         self.fields["departamento"].widget.attrs.update(
-            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
+            {"class": "form-control mb-2 account-form",
+                "placeholder": "Tu departamento"}
         )
         self.fields["zip"].widget.attrs.update(
-            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
+            {"class": "form-control mb-2 account-form",
+                "placeholder": "Código Postal"}
         )
 
 

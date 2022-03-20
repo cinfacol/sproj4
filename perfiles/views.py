@@ -96,10 +96,8 @@ def edit_profile(request):
 @login_required
 def view_address(request):
     addresses = Address.objects.filter(user=request.user)
-    profile = Profile.objects.get(user=request.user)
     context = {
         "addresses": addresses,
-        'profile': profile,
     }
     return render(request, "perfiles/addresses.html", context)
 
@@ -119,7 +117,7 @@ def add_address(request):
     profile = Profile.objects.get(user=request.user)
     context = {
         "form": address_form,
-        'profile': profile
+        'profile': profile,
     }
 
     return render(request, "perfiles/edit_addresses.html", context)

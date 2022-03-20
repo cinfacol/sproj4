@@ -27,19 +27,25 @@ class Post(models.Model):
         blank=True)
     category = TreeManyToManyField(Category)
     publish = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='store_posts', on_delete=models.CASCADE)
     content = models.TextField()
     status = models.CharField(
         max_length=3, choices=options, default='pb')
+
     objects = models.Manager()  # default manager
     newmanager = NewManager()  # custom manager
 
     def get_absolute_url(self):
         return reverse("store:detail", kwargs={'slug': self.slug})
 
+    def get_categories(self):
+        return ','.join([str(c) for c in self.category.all()])
+
     class Meta:
         ordering = ('-publish',)
+        index_together = (('id', 'slug'),)
 
     def __str__(self):
         return self.title

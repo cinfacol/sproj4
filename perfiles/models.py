@@ -1,23 +1,29 @@
 import os
 import uuid
+from pathlib import Path
 
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
 from django.core.mail import send_mail
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from djchoices import ChoiceItem, DjangoChoices
 from djchoices.choices import ChoiceItem
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 def user_directory_path_profile(instance, filename):
     profile_picture_name = 'users/{0}/profile.jpg'.format(
         instance.user.username)
     full_path = os.path.join(settings.MEDIA_ROOT, profile_picture_name)
+    """ full_path = str(BASE_DIR.joinpath(
+        settings.MEDIA_ROOT, profile_picture_name)) """
 
     if os.path.exists(full_path):
         os.remove(full_path)
@@ -29,6 +35,8 @@ def user_directory_path_banner(instance, filename):
     profile_picture_name = 'users/{0}/banner.jpg'.format(
         instance.user.username)
     full_path = os.path.join(settings.MEDIA_ROOT, profile_picture_name)
+    """ full_path = str(BASE_DIR.joinpath(
+        settings.MEDIA_ROOT, profile_picture_name)) """
 
     if os.path.exists(full_path):
         os.remove(full_path)

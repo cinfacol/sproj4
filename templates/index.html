@@ -21,8 +21,6 @@
     <!-- Carousel wrapper -->
     {% include 'carousel.html' %}
     <!-- Carousel wrapper -->
-
-    <section style="background-color: #eee;">
       <div class="container py-5">
         <div class="d-flex justify-content-start align-items-center">
           <h2>Publicaciones</h2>
@@ -52,7 +50,11 @@
                 <div class="card-body">
                   <div class="d-flex justify-content-between">
                     <p class="small">
-                      <a href="#!" class="text-muted">{{ post.inventory.product.type.name }}</a>
+                      <a href="#!" class="text-muted">
+                        {% for category in post.category.all %}
+                            {{ category }}
+                        {% endfor %}
+                      </a>
                     </p>
                     {% if post.inventory.product.discount_price %}
                       <p class="small text-danger">
@@ -89,7 +91,5 @@
           {% include "pagination.html" with page=page_obj %}
         </div> <!-- /row -->
       </div>
-
-    </section>
   </main>
 {% endblock content %}

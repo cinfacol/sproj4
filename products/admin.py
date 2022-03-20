@@ -27,7 +27,7 @@ class BrandAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(MPTTModelAdmin):
-    list_display = ['name', 'slug', 'is_active']
+    list_display = ['name', 'id', 'slug', 'is_active']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('name',)}
 
@@ -47,6 +47,6 @@ class ProductAdmin(admin.ModelAdmin):
         MediaInline,
     ]
     list_display = ['id', 'name', 'slug', 'brand', 'retail_price',
-                    'store_price', 'discount_price', 'created_at']
+                    'store_price', 'discount_price', 'get_categories']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('name',)}

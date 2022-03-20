@@ -29,12 +29,17 @@ class DetalleView(DetailView):
 
 
 class CategoryListView(ListView):
-    def get(self, request, category_slug):
-        category = get_object_or_404(Category, slug=category_slug)
-        posts = Post.objects.filter(category=category)
+    def get(self, request, category_slug=None):
+        category = None
+        categories = Category.objects.all()
+        posts = Post.newmanager.all()
+        if category_slug:
+            category = get_object_or_404(Category, slug=category_slug)
+            posts = Post.objects.filter(category=category)
 
         context = {
             'category': category,
+            'categories': categories,
             'posts': posts
         }
 

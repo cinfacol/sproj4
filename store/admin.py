@@ -8,7 +8,7 @@ from .models import Post, ProductFavorite
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'slug',
-                    'image', 'author', 'publish', 'status']
+                    'get_categories', 'author', 'publish', 'status']
     prepopulated_fields = {'slug': ('title',)}
 
 

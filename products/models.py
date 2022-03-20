@@ -123,7 +123,8 @@ class Product(models.Model):
         verbose_name=_("product website ID"),
         help_text=_("format: required, unique"),
     )
-    category = TreeManyToManyField(Category)
+    category = TreeManyToManyField(
+        Category)
     brand = models.ForeignKey(
         Brand, related_name=_("brand"), on_delete=models.PROTECT
     )
@@ -217,6 +218,9 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product:product_detail", kwargs={"pk": self.pk})
+
+    def get_categories(self):
+        return ','.join([str(c) for c in self.category.all()])
 
     class Meta:
         verbose_name_plural = 'Products'

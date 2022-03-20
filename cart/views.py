@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views import generic
 from django.views.decorators.http import require_POST
+from perfiles.forms import UserAddressForm
 from products.models import Product
 from store.models import Post
 
@@ -33,3 +35,14 @@ def cart_detail(request):
         item['update_quantity_form'] = CartAddProductForm(
             initial={'quantity': item['quantity'], 'override': True})
     return render(request, 'cart/detail.html', {'cart': cart})
+
+
+class CheckoutView(generic.FormView):
+    template_name = 'cart/checkout.html'
+    form_class = UserAddressForm
+
+    def get_context_data(self, **kwargs):
+        cart = Cart(self.request)
+        context = super(CheckoutView, self).get_context_data(**kwargs)
+        context['order'] = cart
+        return context

@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 from perfiles.models import Address
-from products.models import Product
 from store.models import Post
 
 
