@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from inventario.models import Inventory
 from mptt.models import TreeManyToManyField
-from products.models import Category, Media, Product
+from products.models import Product
 
 
 class Post(models.Model):
@@ -20,12 +20,9 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='publish')
-    image = models.ForeignKey(
-        Media, verbose_name='Producto', on_delete=models.CASCADE)
     inventory = models.ForeignKey(
         Inventory, verbose_name='Inventory', on_delete=models.CASCADE, null=True,
         blank=True)
-    category = TreeManyToManyField(Category)
     publish = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(
@@ -39,9 +36,6 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse("store:detail", kwargs={'slug': self.slug})
-
-    def get_categories(self):
-        return ','.join([str(c) for c in self.category.all()])
 
     class Meta:
         ordering = ('-publish',)

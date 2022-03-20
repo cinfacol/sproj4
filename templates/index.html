@@ -41,9 +41,9 @@
                 </div>
                 <a href="{{ post.get_absolute_url }}">
                   <img
-                    src="{{ post.image.image.url }}"
+                    src="{{ post.inventory.product.media.image.url }}"
                     class="card-img-top"
-                    alt="{{ post.image.alt_text }}"
+                    alt="{{ post.inventory.product.media.alt_text }}"
                     style="height:207px"
                   />
                 </a>
@@ -51,7 +51,7 @@
                   <div class="d-flex justify-content-between">
                     <p class="small">
                       <a href="#!" class="text-muted">
-                        {% for category in post.category.all %}
+                        {% for category in post.inventory.product.category.all %}
                             {{ category }}
                         {% endfor %}
                       </a>

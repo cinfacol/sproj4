@@ -95,6 +95,54 @@ class Type(models.Model):
         return self.name
 
 
+class Media(models.Model):
+
+    image = models.ImageField(
+        unique=False,
+        null=False,
+        blank=False,
+        verbose_name=_("product image"),
+        upload_to="images/",
+        default="images/default.png",
+        help_text=_("format: required, default-default.png"),
+    )
+    alt_text = models.CharField(
+        max_length=255,
+        unique=False,
+        null=False,
+        blank=False,
+        verbose_name=_("alternative text"),
+        help_text=_("format: required, max-255"),
+    )
+    is_feature = models.BooleanField(
+        default=False,
+        verbose_name=_("product default image"),
+        help_text=_("format: default=false, true=default image"),
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        editable=False,
+        verbose_name=_("product visibility"),
+        help_text=_("format: Y-m-d H:M:S"),
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_("date sub-product created"),
+        help_text=_("format: Y-m-d H:M:S"),
+    )
+
+    def get_absolute_url(self):
+        return reverse("products:products/product_detail", args=[self.slug])
+
+    class Meta:
+        verbose_name = _("product image")
+        verbose_name_plural = _("product images")
+        ordering = ('created_at',)
+
+    def __str__(self):
+        return self.alt_text
+
+
 class Product(models.Model):
 
     name = models.CharField(
@@ -125,6 +173,8 @@ class Product(models.Model):
     )
     category = TreeManyToManyField(
         Category)
+    media = models.ForeignKey(Media, related_name=_(
+        'media'), on_delete=models.CASCADE)
     brand = models.ForeignKey(
         Brand, related_name=_("brand"), on_delete=models.PROTECT
     )
@@ -272,59 +322,6 @@ class AttributeValue(models.Model):
 
     def __str__(self):
         return f"{self.attribute.name} : {self.attribute_value}"
-
-
-class Media(models.Model):
-
-    product = models.ForeignKey(
-        Product,
-        on_delete=models.PROTECT,
-        related_name=_("image_product"),
-    )
-    image = models.ImageField(
-        unique=False,
-        null=False,
-        blank=False,
-        verbose_name=_("product image"),
-        upload_to="images/",
-        default="images/default.png",
-        help_text=_("format: required, default-default.png"),
-    )
-    alt_text = models.CharField(
-        max_length=255,
-        unique=False,
-        null=False,
-        blank=False,
-        verbose_name=_("alternative text"),
-        help_text=_("format: required, max-255"),
-    )
-    is_feature = models.BooleanField(
-        default=False,
-        verbose_name=_("product default image"),
-        help_text=_("format: default=false, true=default image"),
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        editable=False,
-        verbose_name=_("product visibility"),
-        help_text=_("format: Y-m-d H:M:S"),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_("date sub-product created"),
-        help_text=_("format: Y-m-d H:M:S"),
-    )
-
-    def get_absolute_url(self):
-        return reverse("products:products/product_detail", args=[self.slug])
-
-    class Meta:
-        verbose_name = _("product image")
-        verbose_name_plural = _("product images")
-        ordering = ('product',)
-
-    def __str__(self):
-        return self.alt_text
 
 
 class Favorite(models.Model):
