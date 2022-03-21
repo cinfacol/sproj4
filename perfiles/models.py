@@ -153,12 +153,15 @@ class Address(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(UserBase, on_delete=models.CASCADE)
-    residencia_address = models.CharField(max_length=150)
-    oficina_address = models.CharField(max_length=150)
+    residencia_address = models.CharField(
+        max_length=150, verbose_name='Dirección de residencia')
+    oficina_address = models.CharField(
+        max_length=150, verbose_name='Dirección de oficina')
     pais = CountryField(multiple=False)
     departamento = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
-    zip = models.CharField(max_length=100)
+    zip = models.CharField(
+        max_length=100, verbose_name='Zip code')
     address_type = models.CharField(
         max_length=50, choices=AddressType.choices, default=AddressType.send)
     default = models.BooleanField(default=False)

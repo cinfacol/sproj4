@@ -6,7 +6,7 @@
 
 {% block head_title %}
   {% if user.is_authenticated %}
-    {% translate "Products list" %} - {{ profile.user.username }}
+    {% translate "Products list" %} - {{ user.username }}
   {% else %}
     {% translate "Products list" %}
   {% endif %}
@@ -35,18 +35,21 @@
                 <div class="card h-100">
                   <a href="{% url 'products:media_detail' product.id %}">
                     <img
-                      src="{{ product.image.url }}"
+                      src="{{ product.media.image.url }}"
                       class="card-img-top"
-                      alt="{{ product.alt_text }}"
+                      alt="{{ product.media.alt_text }}"
                     />
                   </a>
+
                   <div class="card-body d-flex align-items-end">
+                    <p class="card-text">
+                      {{ product.description}}
+                    </p>
+                  </div>
+                  <div class="card-footer d-flex">
                     <a href="{{ media.get_absolute_url }}">
-                      <h5 class="card-title">{{ product.product.name }}</h5>
+                      <h5 class="card-title">{{ product.name }}</h5>
                     </a>
-                    {% comment %} <p class="card-text">
-                      {{ product.product.description}}
-                    </p> {% endcomment %}
                   </div>
                 </div>
               </div>

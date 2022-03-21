@@ -5,11 +5,8 @@
 
 {% load i18n %}
 {% block head_title %}
-{% if user.is_authenticated %}
-  {{ object.product.name }} - {{ user.get_username }}
-{% else %}
-  {{ object.product.name }}
-{% endif %}
+
+  {{ object.name }} {% if user.is_authenticated %} - {{ user.username }} {% endif %}
 {% endblock head_title %}
 
 {% block content %}
@@ -20,8 +17,8 @@
           <div class="row g-0">
             <div class="col-md-5 d-flex justify-content-end">
               <img
-                src="{{ object.image.url }}"
-                alt="{{ object.alt_text }}"
+                src="{{ object.media.image.url }}"
+                alt="{{ object.media.alt_text }}"
                 class="img-fluid"
               />
             </div>
@@ -29,23 +26,23 @@
               <div class="card-body">
                 <div class="mb-3 mx-4">
                   <a href="">
-                    <span class="badge  bg-warning mr-1">{{ object.get_category_display }}</span>
-                    <span class="badge  bg-{{ item.get_label_display }}">{% translate "NEW" %}</span>
+                    <span class="badge  bg-warning mr-1">{{ object.get_categories }}</span>
+                    <span class="badge  bg-{{ item.get_label_display }} bg-danger">{% translate "NEW" %}</span>
                   </a>
                   <p class="lead">
-                    {% if object.product.discount_price %}
+                    {% if object.discount_price %}
                     <span class="me-3">
-                      <del>${{ object.product.store_price|intcomma }}</del>
+                      <del>${{ object.store_price|intcomma }}</del>
                     </span>
-                    <span>${{ object.product.discount_price|intcomma }}</span>
+                    <span>${{ object.discount_price|intcomma }}</span>
                     {% else %}
-                    <span>${{ object.product.store_price|intcomma }}</span>
+                    <span>${{ object.store_price|intcomma }}</span>
                     {% endif %}
                   </p>
 
                   <h5 class="card-title">{% translate "Description" %}</h5>
                   <p class="card-text">
-                    {{ object.product.description }}
+                    {{ object.description }}
                   </p>
                   <form  method="POST">
                     {% csrf_token %}

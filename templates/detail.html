@@ -5,11 +5,11 @@
 
 {% load i18n %}
 {% block head_title %}
-{% if user.is_authenticated %}
-  {% translate "Home" %} - {{ user.get_username }}
-{% else %}
-  {% translate "Home" %}
-{% endif %}
+
+  {{ post.inventory.product.name }}
+  {% if user.is_authenticated %}
+    - {{ user.username }}
+  {% endif %}
 {% endblock head_title %}
 
 {% block content %}
@@ -28,9 +28,15 @@
             <div class="col-md-7 d-flex align-self-center">
               <div class="card-body">
                 <div class="mb-3 mx-4">
-                  <a href="">
-                    <span class="badge  bg-warning mr-1">{{ post.get_category_display }}</span>
-                    <span class="badge  bg-{{ item.get_label_display }}">{% translate "NEW" %}</span>
+                  <a href="#">
+                    <span class="badge  bg-warning mr-1">
+                      {% for category in post.inventory.product.category.all %}
+                          {{ category }}
+                      {% endfor %}
+                    </span>
+                    <span class="badge  bg-{{ item.get_label_display }} bg-danger">
+                      {% translate "NEW" %}
+                    </span>
                   </a>
                   <p class="lead">
                     {% if post.inventory.product.discount_price %}

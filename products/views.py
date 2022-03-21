@@ -1,17 +1,17 @@
 from django.shortcuts import render
 from django.views import generic
 
-from .models import Media
+from .models import Product
 
 namespace = "products"
 
 
 class ProductListView(generic.ListView):
 
-    model = Media
+    model = Product
 
     def get(self, request):
-        media = Media.objects.all()
+        media = Product.objects.all()
 
         context = {
             "media": media,
@@ -22,5 +22,5 @@ class ProductListView(generic.ListView):
 
 class MediaDetailView(generic.DetailView):
 
-    model = Media
+    model = Product
     template_name = "products/product_detail.html"

@@ -6,7 +6,7 @@
 
 {% block head_title %}
   {% if user.is_authenticated %}
-    {% translate "Home" %} - {{ profile.user.username}}
+    {% translate "Home" %} - {{ user.username }}
   {% else %}
     {% translate "Home" %}
   {% endif %}

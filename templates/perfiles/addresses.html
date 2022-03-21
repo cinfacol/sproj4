@@ -1,15 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Add Addresses{% endblock %}
-
-
+{% block head_title %}Agregar dirección{% endblock %}
 
 {% block content %}
-<div class="container px-0">
-  <h1 class="h2">Your Addresses</h1>
-  <div>Manage your <b>addresses</b> and delivery preferences</div>
-  <hr />
+  <div class="container py-3">
+    <h1 class="h2">Tus direcciones</h1>
+    <div>Administra tus <b>direcciones</b> y preferencias de envío</div>
+    <hr />
 
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     <div class="col">
       <a href="{% url "perfiles:add_address" %}" class="text-reset text-decoration-none" role="button"
         style="max-width: 540px;">
@@ -31,34 +29,49 @@
     </div>
     {% for address in addresses %}
       <div class="col">
-        <div class="card pb-3">
-          <div class="card-header bg-white small text-muted">
+        <div class="card pb-3 h-100">
+          <div class="card-header bg-light text-primary text-center">
             {% if address.default %}
-              Default
+              <b>Dirección por defecto</b>
             {% endif %}
             &nbsp;
           </div>
           <div class="card-body small pb-1">
-            <p class="card-text m-0 fw-bold">{{address.user}}</p>
-            <p class="card-text m-0">{{address.residencia_address}}</p>
-            <p class="card-text m-0">{{address.oficina_address}}</p>
-            <p class="card-text m-0">{{address.ciudad}}</p>
-            <p class="card-text m-0">{{address.departamento}}</p>
-            <p class="card-text m-0">{{address.zip}}</p>
-            <div class="pt-5">
-              <a href="{% url 'perfiles:edit_address' address.id %}" class="text-decoration-none">Edit</a>
-              |
-              <a href="{% url 'perfiles:delete_address' address.id %}" class="text-decoration-none">Delete</a>
-              {% if not address.default %}
-              | <a href="{% url 'perfiles:set_default' address.id %}" class="text-decoration-none">Set Default</a>
+            <dl class="row">
+              <dt class="col-sm-4">Residencia:</dt>
+              <dd class="col-sm-8">
+                {{address.residencia_address}}
+              </dd>
+              {% if address.oficina_address %}
+                <dt class="col-sm-4">Oficina:</dt>
+                <dd class="col-sm-8">
+                  {{address.oficina_address}}
+                </dd>
               {% endif %}
-            </div>
+              <dt class="col-sm-4">Ciudad:</dt>
+              <dd class="col-sm-8">
+                {{address.ciudad}}
+              </dd>
+              <dt class="col-sm-4">Departamento:</dt>
+              <dd class="col-sm-8">
+                {{address.departamento}}
+              </dd>
+              <dt class="col-sm-4">Zip code:</dt>
+              <dd class="col-sm-8">
+                {{address.zip}}
+              </dd>
+            </dl>
+          </div>
+          <div class="card-footer bg-light">
+            <a class="btn btn-warning btn-sm text-decoration-none" href="{% url 'perfiles:edit_address' address.id %}">Edit</a>
+            <a class="btn btn-danger btn-sm text-decoration-none" href="{% url 'perfiles:delete_address' address.id %}">Delete</a>
+            {% if not address.default %}
+            <a class="btn btn-info btn-sm text-decoration-none" href="{% url 'perfiles:set_default' address.id %}">Set Default</a>
+            {% endif %}
           </div>
         </div>
         </a>
       </div>
     {% endfor %}
   </div>
-</div>
-
 {% endblock %}
