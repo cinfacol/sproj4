@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 from django.views.decorators.http import require_POST
 from perfiles.forms import UserAddressForm
+from perfiles.models import Address
 from products.models import Product
 from store.models import Post
 
@@ -43,6 +44,9 @@ class CheckoutView(generic.FormView):
 
     def get_context_data(self, **kwargs):
         cart = Cart(self.request)
+        addresses = Address.objects.filter(user=self.request.user)
+
         context = super(CheckoutView, self).get_context_data(**kwargs)
         context['order'] = cart
+        context['addresses'] = addresses
         return context

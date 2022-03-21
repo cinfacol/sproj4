@@ -31,31 +31,6 @@ class UserProfileView(View):
         return render(request, 'perfiles/detail.html', context)
 
 
-""" @login_required
-def edit_account(request):
-
-    if request.method == 'POST':
-        user_form = UserEditAccountForm(
-            instance=request.user, data=request.POST)
-
-        if user_form.is_valid():
-            user_form.save()
-        else:
-            print('Error en la validación del formulario')
-    else:
-        user_form = UserEditAccountForm(instance=request.user)
-
-    user = get_object_or_404(UserBase, username=request.user)
-    profile = Profile.objects.get(user=user)
-
-    context = {
-        'user_form': user_form,
-        'profile': profile,
-    }
-
-    return render(request, 'perfiles/edit_account.html', context) """
-
-
 @login_required
 def edit_profile(request):
 

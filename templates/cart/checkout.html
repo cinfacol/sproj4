@@ -32,65 +32,100 @@
                 </div>
             </div>
         {% else %}
+            <div class="row">
+                <div class="col-md-6 mb-md-0">
+                        <h2 class="h3 mb-3 text-black text-center">dirección de envío</h2>
+                        <hr />
+                        <div>
+                            {% for address in addresses %}
+                                {% if address.default %}
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-body small pb-1">
+                                                    <dl class="row">
+                                                    <dt class="col-sm-4">Residencia:</dt>
+                                                    <dd class="col-sm-8">
+                                                        {{address.residencia_address}}
+                                                    </dd>
+                                                    {% if address.oficina_address %}
+                                                        <dt class="col-sm-4">Oficina:</dt>
+                                                        <dd class="col-sm-8">
+                                                        {{address.oficina_address}}
+                                                        </dd>
+                                                    {% endif %}
+                                                    <dt class="col-sm-4">Ciudad:</dt>
+                                                    <dd class="col-sm-8">
+                                                        {{address.ciudad}}
+                                                    </dd>
+                                                    <dt class="col-sm-4">Departamento:</dt>
+                                                    <dd class="col-sm-8">
+                                                        {{address.departamento}}
+                                                    </dd>
+                                                    <dt class="col-sm-4">Zip code:</dt>
+                                                    <dd class="col-sm-8">
+                                                        {{address.zip}}
+                                                    </dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center pt-2" >
+                                            <a href="{% url 'perfiles:direcciones' %}" type="button">cambiar direccion de envío</a>
+                                        </div>
+                                {% else %}
+                                    <p> No has configurado dirección por defecto</p>
+                                    <a href="{% url 'perfiles:direcciones' %}" type="button">configurar direccion de envío</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="p-2 p-lg-2">
 
-                <div class="row">
-                    <div class="col-md-6 mb-md-0">
-                        <form method="POST"> {% csrf_token %}
-                            <h2 class="h3 mb-3 text-black text-center">Billing Details</h2>
-                            <hr />
-                            <div class="p-2 p-lg-2">
-                                {{ form|crispy }}
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-lg py-3 btn-block">
-                                    Proceed to Payment
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h2 class="h3 mb-3 text-black text-center">Your Order</h2>
-                                <hr>
-                                <div class="p-3 p-lg-5">
-                                    <table class="table site-block-order-table">
-                                        <thead>
-                                                <th>Product</th>
-                                                <th>Total</th>
-                                        </thead>
-                                        <tbody>
-                                            {% for item in cart %}
-                                            <tr>
-                                                <td>
-                                                    {{ item.product.title }}
-                                                    <strong class="mx-2">x</strong> {{ item.quantity }}
-                                                </td>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-lg py-3 btn-block">
+                                Continuar con el pago
+                            </button>
+                        </div>
 
-
-                                                <td>
-                                                    $ {{ item.total_price|intcomma }}
-                                                </td>
-
-                                            </tr>
-
-                                            {% endfor %}
-                                            <tr>
-                                                <td><strong class="text-black font-weight-bold">Subtotal</strong></td>
-                                                <td>$ {{ cart.get_total_price|intcomma }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Order Total</strong></td>
-                                                <td><strong class="text-black font-weight-bold">$ {{ cart.get_total_price|intcomma }}</strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="h3 mb-3 text-black text-center">Detalles del pedido</h2>
+                            <hr>
+                            <div class="p-3 p-lg-5">
+                                <table class="table site-block-order-table">
+                                    <thead>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in cart %}
+                                        <tr>
+                                            <td>
+                                                {{ item.product.title }}
+                                                <strong class="mx-2">x</strong> {{ item.quantity }}
+                                            </td>
+                                            <td>
+                                                $ {{ item.total_price|intcomma }}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td><strong class="text-black font-weight-bold">Subtotal</strong></td>
+                                            <td>$ {{ cart.get_total_price|intcomma }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Order Total</strong></td>
+                                            <td><strong class="text-black font-weight-bold">$ {{ cart.get_total_price|intcomma }}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                </div> <!-- /row -->
-
+                </div>
+            </div> <!-- /row -->
         {% endif %}
     </div> <!-- /container -->
 {% endblock content %}
