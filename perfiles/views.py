@@ -11,10 +11,6 @@ from .models import Address, Profile, UserBase
 
 app_name = "perfiles"
 
-# User = get_user_model()
-""" User = get_user_model(Profile)
-print(User) """
-
 
 class UserProfileView(View):
     def get(self, request, username, *args, **kwargs):

@@ -76,6 +76,9 @@
                                     <p> No has configurado dirección por defecto</p>
                                     <a href="{% url 'perfiles:direcciones' %}" type="button">configurar direccion de envío</a>
                                 {% endif %}
+                            {% empty %}
+                                    <p class="text-danger">Aún no has configurado una dirección de envío, ve a tu perfil y agrega tu dirección por defecto</p>
+                                    <a href="{% url 'perfiles:direcciones' %}" type="button">configurar direccion de envío</a>
                             {% endfor %}
                         </div>
                         <div class="p-2 p-lg-2">

@@ -38,26 +38,26 @@
           </div>
           <div class="card-body small pb-1">
             <dl class="row">
-              <dt class="col-sm-4">Residencia:</dt>
-              <dd class="col-sm-8">
+              <dt class="col-sm-5">Residencia:</dt>
+              <dd class="col-sm-7">
                 {{address.residencia_address}}
               </dd>
               {% if address.oficina_address %}
-                <dt class="col-sm-4">Oficina:</dt>
-                <dd class="col-sm-8">
+                <dt class="col-sm-5">Oficina:</dt>
+                <dd class="col-sm-7">
                   {{address.oficina_address}}
                 </dd>
               {% endif %}
-              <dt class="col-sm-4">Ciudad:</dt>
-              <dd class="col-sm-8">
+              <dt class="col-sm-5">Ciudad:</dt>
+              <dd class="col-sm-7">
                 {{address.ciudad}}
               </dd>
-              <dt class="col-sm-4">Departamento:</dt>
-              <dd class="col-sm-8">
+              <dt class="col-sm-5">Departamento:</dt>
+              <dd class="col-sm-7">
                 {{address.departamento}}
               </dd>
-              <dt class="col-sm-4">Zip code:</dt>
-              <dd class="col-sm-8">
+              <dt class="col-sm-5">Zip code:</dt>
+              <dd class="col-sm-7">
                 {{address.zip}}
               </dd>
             </dl>
@@ -66,7 +66,7 @@
             <a class="btn btn-warning btn-sm text-decoration-none" href="{% url 'perfiles:edit_address' address.id %}">Edit</a>
             <a class="btn btn-danger btn-sm text-decoration-none" href="{% url 'perfiles:delete_address' address.id %}">Delete</a>
             {% if not address.default %}
-            <a class="btn btn-info btn-sm text-decoration-none" href="{% url 'perfiles:set_default' address.id %}">Set Default</a>
+              <a class="btn btn-info btn-sm text-decoration-none" href="{% url 'perfiles:set_default' address.id %}">Set Default</a>
             {% endif %}
           </div>
         </div>
