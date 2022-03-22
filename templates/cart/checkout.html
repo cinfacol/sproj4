@@ -19,19 +19,6 @@
         </div>
     </div>
     <div class="container py-3">
-        {% if not request.user.is_authenticated %}
-            <div class="row mb-5">
-                <div class="col-md-12">
-                    <div class="border p-4 rounded" role="alert">
-                        Your are nearly finished with your order.
-                        To finalize your order, please <a href="{% url 'account_login' %}">Login</a> or <a href="{% url 'account_signup' %}">SignUp</a>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-                    </div>
-                </div>
-            </div>
-        {% else %}
             <div class="row">
                 <div class="col-md-6 mb-md-0">
                         <h2 class="h3 mb-3 text-black text-center">dirección de envío</h2>
@@ -129,6 +116,5 @@
                     </div>
                 </div>
             </div> <!-- /row -->
-        {% endif %}
     </div> <!-- /container -->
 {% endblock content %}
