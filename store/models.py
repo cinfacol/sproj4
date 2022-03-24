@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from inventario.models import Inventory
 from mptt.models import TreeManyToManyField
+from perfiles.models import UserBase
 from products.models import Product
 
 
@@ -19,14 +20,13 @@ class Post(models.Model):
             return super().get_queryset().filter(status='pb')
 
     title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250, unique_for_date='publish')
-    inventory = models.ForeignKey(
-        Inventory, verbose_name='Inventory', on_delete=models.CASCADE, null=True,
-        blank=True)
-    publish = models.DateTimeField(default=timezone.now)
-    updated = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(max_length=250, unique_for_date='published')
+    inventory = models.OneToOneField(
+        Inventory, related_name="inventory", on_delete=models.PROTECT, null=True, blank=True)
+    published = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='store_posts', on_delete=models.CASCADE)
+        UserBase, related_name='vendedor', on_delete=models.CASCADE)
     content = models.TextField()
     status = models.CharField(
         max_length=3, choices=options, default='pb')
@@ -38,7 +38,7 @@ class Post(models.Model):
         return reverse("store:detail", kwargs={'slug': self.slug})
 
     class Meta:
-        ordering = ('-publish',)
+        ordering = ('-published',)
         index_together = (('id', 'slug'),)
 
     def __str__(self):
@@ -61,7 +61,7 @@ class ProductFavorite(models.Model):
         on_delete=models.CASCADE,
     )
     client = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        UserBase,
         related_name='favorite_client',
         on_delete=models.CASCADE,
     )

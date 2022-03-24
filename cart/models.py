@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from perfiles.models import Address
+from perfiles.models import Address, UserBase
 from store.models import Post
 
 
@@ -16,13 +16,13 @@ class OrderItem(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, verbose_name=("order_user"), on_delete=models.CASCADE)
+        UserBase, verbose_name=("order_user"), on_delete=models.CASCADE)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(blank=True, null=True)
     ordered = models.BooleanField(default=False)
-    billing_addresss = models.ForeignKey(
+    billing_address = models.ForeignKey(
         Address, related_name='billing_address', blank=True, null=True, on_delete=models.SET_NULL)
-    shipping_addresss = models.ForeignKey(
+    shipping_address = models.ForeignKey(
         Address, related_name='shipping_address', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -34,8 +34,8 @@ class Order(models.Model):
 
 
 class Payment(models.Model):
-    order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name='payments')
+    order = models.OneToOneField(
+        Order, on_delete=models.PROTECT, related_name='payments')
     payment_method = models.CharField(
         max_length=20, choices=(('Paypal', 'Paypal'),))
     timestamp = models.DateTimeField(auto_now_add=True)

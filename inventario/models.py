@@ -21,7 +21,7 @@ class Inventory(models.Model):
         help_text=_("format: required, unique, max-12"),
     )
     product = models.OneToOneField(
-        Product, related_name="product", on_delete=models.PROTECT
+        Product, related_name="product", on_delete=models.PROTECT, null=True, blank=True
     )
     is_active = models.BooleanField(
         default=True,

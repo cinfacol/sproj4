@@ -1,7 +1,10 @@
+from site import USER_BASE
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
+from perfiles.models import UserBase
 
 
 class Category(MPTTModel):
@@ -11,7 +14,7 @@ class Category(MPTTModel):
         null=False,
         unique=False,
         blank=False,
-        verbose_name=_("category name"),
+        verbose_name=_("nombre de categoria"),
         help_text=_("format: required, max-100"),
     )
     slug = models.SlugField(
@@ -19,14 +22,14 @@ class Category(MPTTModel):
         null=False,
         unique=False,
         blank=False,
-        verbose_name=_("category safe URL"),
+        verbose_name=_("slug"),
         help_text=_(
             "format: required, letters, numbers, underscore, or hyphens"
         ),
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name=_("category visibility"),
+        verbose_name=_("activo"),
         help_text=_("format: true=category visible"),
     )
 
@@ -37,7 +40,7 @@ class Category(MPTTModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("parent of category"),
+        verbose_name=_("categoria padre"),
         help_text=_("format: not required"),
     )
 
@@ -48,7 +51,7 @@ class Category(MPTTModel):
         order_insertion_by = ["name"]
 
     class Meta:
-        verbose_name = _("product category")
+        verbose_name = _("categoria")
         verbose_name_plural = _("product categories")
 
     def __str__(self):
@@ -62,7 +65,7 @@ class Brand(models.Model):
         unique=True,
         null=False,
         blank=False,
-        verbose_name=_("brand name"),
+        verbose_name=_("nombre de marca"),
         help_text=_("format: required, unique, max-255"),
     )
     is_active = models.BooleanField(
@@ -82,65 +85,17 @@ class Type(models.Model):
         unique=True,
         null=False,
         blank=False,
-        verbose_name=_("type of product"),
+        verbose_name=_("tipo de producto"),
         help_text=_("format: required, unique, max-255"),
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name=_("product visibility"),
+        verbose_name=_("producto activo"),
         help_text=_("format: true=product visible"),
     )
 
     def __str__(self):
         return self.name
-
-
-class Media(models.Model):
-
-    image = models.ImageField(
-        unique=False,
-        null=False,
-        blank=False,
-        verbose_name=_("product image"),
-        upload_to="images/",
-        default="images/default.png",
-        help_text=_("format: required, default-default.png"),
-    )
-    alt_text = models.CharField(
-        max_length=255,
-        unique=False,
-        null=False,
-        blank=False,
-        verbose_name=_("alternative text"),
-        help_text=_("format: required, max-255"),
-    )
-    is_feature = models.BooleanField(
-        default=False,
-        verbose_name=_("product default image"),
-        help_text=_("format: default=false, true=default image"),
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        editable=False,
-        verbose_name=_("product visibility"),
-        help_text=_("format: Y-m-d H:M:S"),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_("date sub-product created"),
-        help_text=_("format: Y-m-d H:M:S"),
-    )
-
-    def get_absolute_url(self):
-        return reverse("products:products/product_detail", args=[self.slug])
-
-    class Meta:
-        verbose_name = _("product image")
-        verbose_name_plural = _("product images")
-        ordering = ('created_at',)
-
-    def __str__(self):
-        return self.alt_text
 
 
 class Product(models.Model):
@@ -150,7 +105,7 @@ class Product(models.Model):
         unique=False,
         null=False,
         blank=False,
-        verbose_name=_("product name"),
+        verbose_name=_("nombre"),
         help_text=_("format: required, max-255"),
     )
     slug = models.SlugField(
@@ -158,7 +113,7 @@ class Product(models.Model):
         unique=False,
         null=False,
         blank=False,
-        verbose_name=_("product safe URL"),
+        verbose_name=_("Slug"),
         help_text=_(
             "format: required, letters, numbers, underscores or hyphens"
         ),
@@ -168,13 +123,10 @@ class Product(models.Model):
         unique=True,
         null=False,
         blank=False,
-        verbose_name=_("product website ID"),
-        help_text=_("format: required, unique"),
+        verbose_name=_("ID Web del producto"),
+        help_text=_("numero de referencia"),
     )
-    category = TreeManyToManyField(
-        Category)
-    media = models.ForeignKey(Media, related_name=_(
-        'media'), on_delete=models.CASCADE)
+    category = TreeManyToManyField(Category)
     brand = models.ForeignKey(
         Brand, related_name=_("brand"), on_delete=models.PROTECT
     )
@@ -184,7 +136,7 @@ class Product(models.Model):
         unique=False,
         null=False,
         blank=False,
-        verbose_name=_("product description"),
+        verbose_name=_("descripcion"),
         help_text=_("format: required"),
     )
     retail_price = models.DecimalField(
@@ -193,7 +145,7 @@ class Product(models.Model):
         unique=False,
         null=False,
         blank=False,
-        verbose_name=_("recommended retail price"),
+        verbose_name=_("precio al detalle"),
         help_text=_("format: maximum price 9.999.999.99"),
         error_messages={
             "name": {
@@ -207,7 +159,7 @@ class Product(models.Model):
         unique=False,
         null=False,
         blank=False,
-        verbose_name=_("regular store price"),
+        verbose_name=_("precio regular"),
         help_text=_("format: maximum price 9.999.999.99"),
         error_messages={
             "name": {
@@ -221,7 +173,7 @@ class Product(models.Model):
         unique=False,
         null=True,
         blank=True,
-        verbose_name=_("discount percentage"),
+        verbose_name=_("porcentaje de descuento"),
         help_text=_("format: maximum value 99.99"),
         error_messages={
             "name": {
@@ -235,7 +187,7 @@ class Product(models.Model):
         unique=False,
         null=True,
         blank=True,
-        verbose_name=_("discount price"),
+        verbose_name=_("precio con descuento"),
         help_text=_("format: maximum price 9.999.999.99"),
         error_messages={
             "name": {
@@ -247,22 +199,22 @@ class Product(models.Model):
         unique=False,
         null=False,
         blank=False,
-        verbose_name=_("product weight"),
+        verbose_name=_("peso del producto"),
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name=_("product visibility"),
+        verbose_name=_("activo"),
         help_text=_("format: true=product visible"),
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
         editable=False,
-        verbose_name=_("date product created"),
+        verbose_name=_("fecha creacion"),
         help_text=_("format: Y-m-d H:M:S"),
     )
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name=_("date product last updated"),
+        verbose_name=_("actualizado"),
         help_text=_("format: Y-m-d H:M:S"),
     )
 
@@ -278,6 +230,61 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Media(models.Model):
+
+    image = models.ImageField(
+        unique=False,
+        null=False,
+        blank=False,
+        verbose_name=_("imagen"),
+        upload_to="images/",
+        default="images/default.png",
+        help_text=_("format: required, default-default.png"),
+    )
+    alt_text = models.CharField(
+        max_length=255,
+        unique=False,
+        null=False,
+        blank=False,
+        verbose_name=_("texto alternativo"),
+        help_text=_("format: required, max-255"),
+    )
+    product = models.ForeignKey(Product, related_name=_(
+        'products'), on_delete=models.CASCADE)
+    is_featured = models.BooleanField(
+        default=False,
+        verbose_name=_("destacado"),
+        help_text=_("format: default=false, true=default image"),
+    )
+    default = models.BooleanField(
+        default=False,
+        verbose_name=_("por defecto"),
+        help_text=_("format: default=false, true=default image"),
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        editable=False,
+        verbose_name=_("creado desde"),
+        help_text=_("format: Y-m-d H:M:S"),
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_("actualizado"),
+        help_text=_("format: Y-m-d H:M:S"),
+    )
+
+    def get_absolute_url(self):
+        return reverse("products:products/product_detail", args=[self.slug])
+
+    class Meta:
+        verbose_name = _("product image")
+        verbose_name_plural = _("product images")
+        ordering = ('created_at',)
+
+    def __str__(self):
+        return self.alt_text
 
 
 class Attribute(models.Model):
@@ -296,7 +303,6 @@ class Attribute(models.Model):
         unique=False,
         null=False,
         blank=False,
-        verbose_name=_("product attribute description"),
         help_text=_("format: required"),
     )
 
@@ -324,13 +330,10 @@ class AttributeValue(models.Model):
         return f"{self.attribute.name} : {self.attribute_value}"
 
 
-class Favorite(models.Model):
+""" class Favorite(models.Model):
     product = models.ManyToManyField(
         Product, related_name=_("favorite_product"))
-    client = models.IntegerField(
-        default=0, unique=False, null=False, blank=False, verbose_name=_(
-            "Client Id"), help_text=_("format: required, default-0"),
-    )  # Edit for Client ForeignKey
+    user = models.ManyToManyField(UserBase)
     status = models.CharField(
         max_length=50,
         unique=False,
@@ -345,3 +348,4 @@ class Favorite(models.Model):
         verbose_name=_("created at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
+ """

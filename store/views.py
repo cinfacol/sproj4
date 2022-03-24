@@ -1,7 +1,8 @@
+from itertools import product
 from cart.forms import CartAddProductForm
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
-from products.models import Category
+from products.models import Category, Media
 
 from .models import Post
 

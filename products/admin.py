@@ -37,8 +37,15 @@ class MediaAdmin(admin.ModelAdmin):
     list_display = ['id', 'alt_text', 'image', 'created_at', 'updated_at']
 
 
+class MediaInline(admin.TabularInline):
+    model = Media
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    inlines = [
+        MediaInline,
+    ]
 
     list_display = ['id', 'name', 'slug', 'media', 'brand', 'retail_price',
                     'store_price', 'discount_price', 'get_categories']
