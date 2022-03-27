@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from perfiles.forms import UserAddressForm
 from perfiles.models import Address
 from products.models import Product
-from store.models import Post
+from store.models import Articulo
 
 from .cart import Cart
 from .forms import CartAddProductForm
@@ -14,19 +14,19 @@ from .forms import CartAddProductForm
 @require_POST
 def cart_add(request, product_id):
     cart = Cart(request)
-    product = get_object_or_404(Post, id=product_id)
+    product = get_object_or_404(Articulo, id=product_id)
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(product=product,
                  quantity=cd['quantity'], override_quantity=cd['override'])
-
+    print(product_id)
     return redirect('cart:cart_detail')
 
 
 def cart_remove(request, product_id):
     cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(Articulo, id=product_id)
     cart.remove(product)
     return redirect('cart:cart_detail')
 

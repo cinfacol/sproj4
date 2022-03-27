@@ -20,8 +20,8 @@
           <div class="row g-0">
             <div class="col-md-5 d-flex justify-content-end">
               <img
-                src="{{ object.inventory.product.media.image.url }}"
-                alt="{{ post.inventory.product.media.alt_text }}"
+                src="{{post.inventory.products.get.imagenes.first.image.url}}"
+                alt="{{post.inventory.products.get.imagenes.first.alt_text}}"
                 class="img-fluid"
               />
             </div>
@@ -30,7 +30,7 @@
                 <div class="mb-3 mx-4">
                   <a href="#">
                     <span class="badge  bg-warning mr-1">
-                      {% for category in post.inventory.product.category.all %}
+                      {% for category in post.inventory.products.get.category.all %}
                           {{ category }}
                       {% endfor %}
                     </span>
@@ -39,19 +39,19 @@
                     </span>
                   </a>
                   <p class="lead">
-                    {% if post.inventory.product.discount_price %}
+                    {% if post.inventory.products.get.discount_price %}
                     <span class="me-3">
-                      <del>${{ post.inventory.product.store_price|intcomma }}</del>
+                      <del>${{ post.inventory.products.get.store_price|intcomma }}</del>
                     </span>
-                    <span>${{ post.inventory.product.discount_price|intcomma }}</span>
+                    <span>${{ post.inventory.products.get.discount_price|intcomma }}</span>
                     {% else %}
-                    <span>${{ post.inventory.product.store_price|intcomma }}</span>
+                    <span>${{ post.inventory.products.get.store_price|intcomma }}</span>
                     {% endif %}
                   </p>
 
                   <h5 class="card-title">{% translate "Description" %}</h5>
                   <p class="card-text">
-                    {{ post.inventory.product.description }}
+                    {{ post.inventory.products.get.description }}
                   </p>
                   <form action="{% url 'cart:cart_add' post.id %}" method="POST">
                     {% csrf_token %}

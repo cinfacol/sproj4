@@ -1,14 +1,11 @@
-from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from inventario.models import Inventory
-from mptt.models import TreeManyToManyField
 from perfiles.models import UserBase
-from products.models import Product
 
 
-class Post(models.Model):
+class Articulo(models.Model):
 
     options = (
         ('upb', 'Unpublished'),
@@ -21,12 +18,13 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published')
-    inventory = models.OneToOneField(
-        Inventory, related_name="inventory", on_delete=models.PROTECT, null=True, blank=True)
+
     published = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(
         UserBase, related_name='vendedor', on_delete=models.CASCADE)
+    inventory = models.OneToOneField(
+        Inventory, related_name="inventorys", on_delete=models.CASCADE)
     content = models.TextField()
     status = models.CharField(
         max_length=3, choices=options, default='pb')
@@ -45,7 +43,7 @@ class Post(models.Model):
         return self.title
 
 
-class ProductFavorite(models.Model):
+""" class ProductFavorite(models.Model):
 
     FAVORITE_STATUS = (
         ('AC', 'Publicación activa'),
@@ -74,4 +72,4 @@ class ProductFavorite(models.Model):
     )
 
     def __str__(self):
-        return self.product
+        return self.product """

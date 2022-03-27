@@ -1,7 +1,8 @@
+from itertools import product
 from django.shortcuts import render
 from django.views import generic
 
-from .models import Product
+from .models import Product, Media
 
 namespace = "products"
 
@@ -11,10 +12,14 @@ class ProductListView(generic.ListView):
     model = Product
 
     def get(self, request):
-        media = Product.objects.all()
+        products = Product.objects.all()
+        products_images = products.filter(imagenes__default=True)
+        print(products)
+        print(products_images)
 
         context = {
-            "media": media,
+            "products": products,
+            "images": products_images,
         }
 
         return render(request, "products/product_list.html", context)

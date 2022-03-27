@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from products.models import Product
 
 
 class Inventory(models.Model):
@@ -20,12 +19,9 @@ class Inventory(models.Model):
         verbose_name=_("universal product code"),
         help_text=_("format: required, unique, max-12"),
     )
-    product = models.OneToOneField(
-        Product, related_name="product", on_delete=models.PROTECT, null=True, blank=True
-    )
     is_active = models.BooleanField(
         default=True,
-        verbose_name=_("product visibility"),
+        verbose_name=_("activo"),
         help_text=_("format: true=product visible"),
     )
     created_at = models.DateTimeField(
@@ -41,7 +37,7 @@ class Inventory(models.Model):
     )
 
     def __str__(self):
-        return self.product.name
+        return self.sku
 
 
 class Stock(models.Model):

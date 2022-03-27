@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from store.models import Post
+from store.models import Articulo
 
 
 class Cart(object):
@@ -20,7 +20,7 @@ class Cart(object):
         product_id = str(product.id)
         if product_id not in self.cart:
             self.cart[product_id] = {
-                'quantity': 0, 'price': str(product.inventory.product.store_price)}
+                'quantity': 0, 'price': str(product.inventory.products.get().store_price)}
 
         if override_quantity:
             self.cart[product_id]['quantity'] = quantity
@@ -40,7 +40,7 @@ class Cart(object):
 
     def __iter__(self):
         product_ids = self.cart.keys()
-        products = Post.objects.filter(id__in=product_ids)
+        products = Articulo.objects.filter(id__in=product_ids)
 
         cart = self.cart.copy()
         for product in products:

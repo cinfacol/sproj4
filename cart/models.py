@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.db import models
 from perfiles.models import Address, UserBase
-from store.models import Post
+from store.models import Articulo
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(
         "order", related_name='item', on_delete=models.CASCADE)
-    product = models.ForeignKey(Post, on_delete=models.CASCADE)
+    product = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):

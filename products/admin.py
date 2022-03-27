@@ -5,14 +5,21 @@ from .models import (Attribute, AttributeValue, Brand, Category, Media,
                      Product, Type)
 
 
-@admin.register(Attribute)
-class AttributeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
-
-
 @admin.register(AttributeValue)
 class AttributeValueAdmin(admin.ModelAdmin):
     list_display = ['attribute', 'attribute_value']
+
+
+class AttributeValueInline(admin.TabularInline):
+    model = AttributeValue
+
+
+@admin.register(Attribute)
+class AttributeAdmin(admin.ModelAdmin):
+    inlines = [
+        AttributeValueInline,
+    ]
+    list_display = ['name', 'description']
 
 
 @admin.register(Type)
@@ -34,7 +41,7 @@ class CategoryAdmin(MPTTModelAdmin):
 
 @admin.register(Media)
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ['id', 'alt_text', 'image', 'created_at', 'updated_at']
+    list_display = ['id', 'alt_text', 'image', 'created_at', 'default']
 
 
 class MediaInline(admin.TabularInline):
@@ -47,7 +54,7 @@ class ProductAdmin(admin.ModelAdmin):
         MediaInline,
     ]
 
-    list_display = ['id', 'name', 'slug', 'media', 'brand', 'retail_price',
-                    'store_price', 'discount_price', 'get_categories']
+    list_display = ['name', 'slug', 'brand',
+                    'store_price', 'percent_discount_price', 'discount_price', 'get_categories']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('name',)}

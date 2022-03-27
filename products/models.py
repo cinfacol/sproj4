@@ -3,6 +3,7 @@ from site import USER_BASE
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from inventario.models import Inventory
 from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
 from perfiles.models import UserBase
 
@@ -98,6 +99,47 @@ class Type(models.Model):
         return self.name
 
 
+class Attribute(models.Model):
+
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+        null=False,
+        blank=False,
+        verbose_name=_("product attribute name"),
+        help_text=_("format: required, unique, max-255"),
+    )
+    description = models.TextField(
+        unique=False,
+        null=False,
+        blank=False,
+        help_text=_("format: required"),
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class AttributeValue(models.Model):
+
+    attribute = models.ForeignKey(
+        Attribute,
+        related_name="attribute",
+        on_delete=models.PROTECT,
+    )
+    attribute_value = models.CharField(
+        max_length=255,
+        unique=False,
+        null=False,
+        blank=False,
+        verbose_name=_("attribute value"),
+        help_text=_("format: required, max-255"),
+    )
+
+    def __str__(self):
+        return f"{self.attribute.name} : {self.attribute_value}"
+
+
 class Product(models.Model):
 
     name = models.CharField(
@@ -123,15 +165,20 @@ class Product(models.Model):
         unique=True,
         null=False,
         blank=False,
-        verbose_name=_("ID Web del producto"),
+        verbose_name=_("ID Web"),
         help_text=_("numero de referencia"),
     )
-    category = TreeManyToManyField(Category)
+    inventory = models.ForeignKey(
+        Inventory, related_name="products", on_delete=models.CASCADE, null=True, blank=True
+    )
+    category = TreeManyToManyField(Category, verbose_name="category")
     brand = models.ForeignKey(
         Brand, related_name=_("brand"), on_delete=models.PROTECT
     )
     type = models.ForeignKey(
         Type, verbose_name=_("Product Type"), on_delete=models.CASCADE)
+    attribute = models.ManyToManyField(
+        Attribute, related_name=_("Attributes"))
     description = models.TextField(
         unique=False,
         null=False,
@@ -251,8 +298,8 @@ class Media(models.Model):
         verbose_name=_("texto alternativo"),
         help_text=_("format: required, max-255"),
     )
-    product = models.ForeignKey(Product, related_name=_(
-        'products'), on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, related_name='imagenes', on_delete=models.CASCADE)
     is_featured = models.BooleanField(
         default=False,
         verbose_name=_("destacado"),
@@ -285,49 +332,6 @@ class Media(models.Model):
 
     def __str__(self):
         return self.alt_text
-
-
-class Attribute(models.Model):
-
-    name = models.CharField(
-        max_length=255,
-        unique=True,
-        null=False,
-        blank=False,
-        verbose_name=_("product attribute name"),
-        help_text=_("format: required, unique, max-255"),
-    )
-    product = models.ManyToManyField(
-        Product, verbose_name=_("Product_Attribute"))
-    description = models.TextField(
-        unique=False,
-        null=False,
-        blank=False,
-        help_text=_("format: required"),
-    )
-
-    def __str__(self):
-        return self.name
-
-
-class AttributeValue(models.Model):
-
-    attribute = models.ForeignKey(
-        Attribute,
-        related_name="attribute",
-        on_delete=models.PROTECT,
-    )
-    attribute_value = models.CharField(
-        max_length=255,
-        unique=False,
-        null=False,
-        blank=False,
-        verbose_name=_("attribute value"),
-        help_text=_("format: required, max-255"),
-    )
-
-    def __str__(self):
-        return f"{self.attribute.name} : {self.attribute_value}"
 
 
 """ class Favorite(models.Model):
