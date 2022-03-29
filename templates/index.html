@@ -23,7 +23,7 @@
     <!-- Carousel wrapper -->
       <div class="container py-5">
         <div class="d-flex justify-content-start align-items-center">
-          <h2>Publicaciones</h2>
+          <h2>Ofertas</h2>
           <a class="mx-3" href="#">Ver todas</a>
         </div>
         <div class="row">
@@ -41,36 +41,36 @@
                 </div>
                 <a href="{{ articulo.get_absolute_url }}">
                   <img
-                    src="{{ articulo.inventory.products.get.imagenes.first.image.url }}"
+                    src="{{ articulo.img.url }}"
                     class="card-img-top"
-                    alt="{{ articulo.inventory.products.get.imagenes.first.alt_text }}"
+                    alt="{{ articulo.alt_text }}"
                     style="height:207px"
                   />
                 </a>
                 <div class="card-body">
                   <div class="d-flex justify-content-between">
                     <p class="small">
-                      <a href="#!" class="text-muted">
-                        {% for category in articulo.inventory.products.get.category.all %}
+                      <a href="{{ articulo.get_absolute_url }}" class="text-muted">
+                        {% for category in articulo.product.category.all %}
                             {{ category}}
                         {% endfor %}
                       </a>
                     </p>
-                    {% if articulo.inventory.products.get.discount_price %}
+                    {% if articulo.product.discount_price %}
                       <p class="small text-danger">
-                        <s>$ {{ articulo.inventory.products.get.store_price|intcomma }}</s>
+                        <s>$ {{ articulo.product.store_price|intcomma }}</s>
                       </p>
                     {% endif %}
                   </div>
 
                   <div class="d-flex justify-content-between mb-3">
                     <a href="{{ articulo.get_absolute_url }}" class="text-decorations-none">
-                      <h5 class="mb-0">{{ articulo.title }}</h5>
+                      <p class="card-text mb-0">{{ articulo.title }}</p>
                     </a>
-                    {% if articulo.inventory.products.get.discount_price %}
-                      <h5 class="text-dark mb-0">$ {{ articulo.inventory.products.get.discount_price|intcomma }}</h5>
+                    {% if articulo.product.discount_price %}
+                      <p class="text-dark mb-0">$ {{ articulo.product.discount_price|intcomma }}</p>
                     {% else %}
-                      <h5 class="text-dark mb-0">$ {{ articulo.inventory.products.get.store_price|intcomma }}</h5>
+                      <p class="text-dark mb-0">$ {{ articulo.product.store_price|intcomma }}</p>
                     {% endif %}
                   </div>
 

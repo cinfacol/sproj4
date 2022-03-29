@@ -1,11 +1,8 @@
-from site import USER_BASE
-
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from inventario.models import Inventory
 from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
-from perfiles.models import UserBase
 
 
 class Category(MPTTModel):
@@ -220,7 +217,7 @@ class Product(models.Model):
         unique=False,
         null=True,
         blank=True,
-        verbose_name=_("porcentaje de descuento"),
+        verbose_name=_("descuento %"),
         help_text=_("format: maximum value 99.99"),
         error_messages={
             "name": {
@@ -234,7 +231,7 @@ class Product(models.Model):
         unique=False,
         null=True,
         blank=True,
-        verbose_name=_("precio con descuento"),
+        verbose_name=_("precio oferta"),
         help_text=_("format: maximum price 9.999.999.99"),
         error_messages={
             "name": {
@@ -269,7 +266,7 @@ class Product(models.Model):
         return reverse("product:product_detail", kwargs={"pk": self.pk})
 
     def get_categories(self):
-        return ','.join([str(c) for c in self.category.all()])
+        return ', '.join([str(c) for c in self.category.all()])
 
     class Meta:
         verbose_name_plural = 'Products'
@@ -332,24 +329,3 @@ class Media(models.Model):
 
     def __str__(self):
         return self.alt_text
-
-
-""" class Favorite(models.Model):
-    product = models.ManyToManyField(
-        Product, related_name=_("favorite_product"))
-    user = models.ManyToManyField(UserBase)
-    status = models.CharField(
-        max_length=50,
-        unique=False,
-        null=False,
-        blank=False,
-        verbose_name=_("status"),
-        help_text=_("format: required, max-50"),
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        editable=False,
-        verbose_name=_("created at"),
-        help_text=_("format: Y-m-d H:M:S"),
-    )
- """

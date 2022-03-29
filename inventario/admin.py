@@ -5,7 +5,7 @@ from .models import Inventory, Stock
 
 @admin.register(Inventory)
 class InventoryAdmin(admin.ModelAdmin):
-    list_display = ['sku', 'created_at']
+    list_display = ['sku', 'upc', 'created_at']
 
 
 @admin.register(Stock)

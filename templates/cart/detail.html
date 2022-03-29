@@ -29,7 +29,7 @@
               <tr>
                 <td>
                   <a href="{{ product.get_absolute_url }}">
-                    <img height="35" src="{% if product.inventory.products.get.imagenes.first.image %}{{ product.inventory.products.get.imagenes.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}">
+                    <img height="35" src="{{ product.img.url }}">
                   </a>
                 </td>
                 <td> {{ product.title }} </td>

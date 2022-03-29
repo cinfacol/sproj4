@@ -1,7 +1,7 @@
 from cart.forms import CartAddProductForm
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
-from products.models import Category, Media
+from products.models import Category, Product
 
 from .models import Articulo
 
@@ -10,17 +10,9 @@ namespace = 'store'
 
 class HomeView(ListView):
     queryset = Articulo.newmanager.all()
+    context_object_name = 'articulos'
     paginate_by = 4
     template_name = 'index.html'
-
-    def get_context_data(self, **kwargs):
-        qs = Articulo.newmanager.filter(
-            inventory__products__imagenes__default=True)
-        images = Articulo.newmanager.filter()
-        context = super(HomeView, self).get_context_data(**kwargs)
-        context["articulos"] = qs
-        print(qs)
-        return context
 
 
 class DetalleView(DetailView):
@@ -31,8 +23,10 @@ class DetalleView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(DetalleView, self).get_context_data(*args, **kwargs)
         context["post"] = self.get_object()
+        context["images"] = context["post"].product.imagenes.all()[:3]
+        # context["images"] = Articulo.newmanager.all()
         context["cart_product_form"] = self.cart_product_form
-
+        print(context["images"][:1])
         return context
 
 

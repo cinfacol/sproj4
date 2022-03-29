@@ -1,8 +1,11 @@
+from itertools import product
+
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from inventario.models import Inventory
 from perfiles.models import UserBase
+from products.models import Product
 
 
 class Articulo(models.Model):
@@ -18,13 +21,20 @@ class Articulo(models.Model):
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published')
-
+    img = models.ImageField(
+        unique=False,
+        null=False,
+        blank=False,
+        verbose_name="imagen",
+        upload_to="images/",
+        default="images/default.png",
+        help_text="Imagen de presentacion del articulo",
+    )
     published = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(
         UserBase, related_name='vendedor', on_delete=models.CASCADE)
-    inventory = models.OneToOneField(
-        Inventory, related_name="inventorys", on_delete=models.CASCADE)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
     content = models.TextField()
     status = models.CharField(
         max_length=3, choices=options, default='pb')
