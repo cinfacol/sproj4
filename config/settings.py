@@ -152,15 +152,18 @@ CART_SESSION_ID = 'cart'
 
 if DEBUG is False:
     SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_REDIRECT_EXEMPT = []
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-    ALLOWED_HOSTS = ['https://midominio.com']
+    ALLOWED_HOSTS = ['http://sproj4-herokuapp.com', 'localhost', '127.0.0.1']
 
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
