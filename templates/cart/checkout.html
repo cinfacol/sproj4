@@ -26,69 +26,67 @@
                 <div>
                     {% for address in addresses %}
                         {% if address.default %}
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body small pb-1">
-                                            <dl class="row">
-                                            <dt class="col-sm-4">Residencia:</dt>
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body small pb-1">
+                                        <dl class="row">
+                                        <dt class="col-sm-4">Residencia:</dt>
+                                        <dd class="col-sm-8">
+                                            {{address.residencia_address}}
+                                        </dd>
+                                        {% if address.oficina_address %}
+                                            <dt class="col-sm-4">Oficina:</dt>
                                             <dd class="col-sm-8">
-                                                {{address.residencia_address}}
+                                            {{address.oficina_address}}
                                             </dd>
-                                            {% if address.oficina_address %}
-                                                <dt class="col-sm-4">Oficina:</dt>
-                                                <dd class="col-sm-8">
-                                                {{address.oficina_address}}
-                                                </dd>
-                                            {% endif %}
-                                            <dt class="col-sm-4">Ciudad:</dt>
-                                            <dd class="col-sm-8">
-                                                {{address.ciudad}}
-                                            </dd>
-                                            <dt class="col-sm-4">Departamento:</dt>
-                                            <dd class="col-sm-8">
-                                                {{address.departamento}}
-                                            </dd>
-                                            <dt class="col-sm-4">Zip code:</dt>
-                                            <dd class="col-sm-8">
-                                                {{address.zip}}
-                                            </dd>
-                                            </dl>
-                                        </div>
+                                        {% endif %}
+                                        <dt class="col-sm-4">Ciudad:</dt>
+                                        <dd class="col-sm-8">
+                                            {{address.ciudad}}
+                                        </dd>
+                                        <dt class="col-sm-4">Departamento:</dt>
+                                        <dd class="col-sm-8">
+                                            {{address.departamento}}
+                                        </dd>
+                                        <dt class="col-sm-4">Zip code:</dt>
+                                        <dd class="col-sm-8">
+                                            {{address.zip}}
+                                        </dd>
+                                        </dl>
                                     </div>
                                 </div>
-                                <div class="text-center pt-2" >
-                                    <a href="{% url 'perfiles:direcciones' %}" type="button">cambiar direccion de envío</a>
-                                </div>
-                        {% else %}
-                            <p> No has configurado dirección por defecto</p>
-                            <a href="{% url 'perfiles:direcciones' %}" type="button">configurar direccion de envío</a>
+                            </div>
+                            {% comment %} <div class="text-center pt-2" >
+                                <a href="{% url 'perfiles:direcciones' %}" type="button">cambiar direccion de envío</a>
+                            </div> {% endcomment %}
+                        {% comment %} {% else %}
+                            <p>cambiar dirección de envío por defecto</p>
+                            <a href="{% url 'perfiles:direcciones' %}" type="button">configurar direccion de envío</a> {% endcomment %}
                         {% endif %}
                     {% empty %}
-                        <p class="text-danger">Aún no has configurado una dirección de envío, ve a tu perfil y agrega tu dirección por defecto</p>
-                        <a href="{% url 'perfiles:direcciones' %}" type="button">configurar direccion de envío</a>
+                        <div class="text-center">
+                            <p class="text-danger">Aún no has configurado una dirección, click en el siguente enlace <br/><a href="{% url 'perfiles:direcciones' %}" type="button">configurar direccion de envío</a><br/> y agrega una dirección de envío</p>
+                        </div>
                     {% endfor %}
                 </div>
-                <div class="p-2 p-lg-2">
-
-                </div>
-                <div class="">
+                <div class="p-3 p-lg-3">
                     <a href="{% url 'cart:cart_detail' %}" class="btn btn-warning btn-lg" tabindex="-1" role="button">
                         Regresar al Carrito
                     </a>
                     <a class="btn btn-primary btn-lg" tabindex="-1" role="submit">
                         Continuar con el Pago
                     </a>
-                    {% comment %} <button type="submit" class="btn btn-success">
-                        Continuar con el pago
-                    </button> {% endcomment %}
+                </div>
+                <div class="p-2 p-lg-2">
+                    <a href="{% url 'perfiles:direcciones' %}">cambiar o agregar dirección de envío por defecto</a>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2 class="h3 mb-3 text-black text-center">Detalles del pedido</h2>
+                        <h2 class="h3 mb-3 text-black text-center">Detalle del pedido</h2>
                         <hr>
-                        <div class="p-3 p-lg-5">
+                        <div class="p-2 p-lg-3">
                             <table class="table site-block-order-table">
                                 <thead>
                                         <th>Product</th>

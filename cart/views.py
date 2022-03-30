@@ -1,10 +1,8 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 from django.views.decorators.http import require_POST
 from perfiles.forms import UserAddressForm
 from perfiles.models import Address
-from products.models import Product
 from store.models import Articulo
 
 from .cart import Cart
