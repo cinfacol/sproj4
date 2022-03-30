@@ -60,13 +60,13 @@
         </tbody>
       </table>
       <p class="text-right">
-        <a href="{% url 'store:home' %}" class="btn btn-primary">Continue Shopping</a>
-        <a href="{% url 'cart:checkout' %}" class="btn btn-warning">CheckOut</a>
+        <a href="{% url 'store:home' %}" class="btn btn-primary">Seguir Comprando</a>
+        <a href="{% url 'cart:checkout' %}" class="btn btn-warning">Verificar Compra</a>
       </p>
     {% else %}
       <div class="alert alert-warning">No hay productos agregados a tu carrito de compras</div>
       <p class="text-right">
-        <a href="{% url 'store:home' %}" class="btn btn-primary">Continue Shopping</a>
+        <a href="{% url 'store:home' %}" class="btn btn-primary">Seguir Comprando</a>
       </p>
     {% endif %}
   </div>

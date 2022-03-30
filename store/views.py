@@ -24,9 +24,8 @@ class DetalleView(DetailView):
         context = super(DetalleView, self).get_context_data(*args, **kwargs)
         context["post"] = self.get_object()
         context["images"] = context["post"].product.imagenes.all()[:3]
-        # context["images"] = Articulo.newmanager.all()
         context["cart_product_form"] = self.cart_product_form
-        print(context["images"][:1])
+
         return context
 
 

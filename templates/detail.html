@@ -55,7 +55,7 @@
                 <form action="{% url 'cart:cart_add' post.id %}" method="POST">
                   {% csrf_token %}
                   {{ cart_product_form|crispy }}
-                  <input type="submit" class="btn btn-primary btn-md my-0 p" value="{% translate "Add to cart" %}">
+                  <input type="submit" class="btn btn-primary btn-md my-0 p" value="{% translate "Agregar al carrito" %}">
                 </form>
               </div>
             </div>
