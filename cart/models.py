@@ -1,24 +1,14 @@
-from django.conf import settings
 from django.db import models
 from perfiles.models import Address, UserBase
 from store.models import Articulo
 
 
-class OrderItem(models.Model):
-    order = models.ForeignKey(
-        "order", related_name='item', on_delete=models.CASCADE)
-    product = models.ForeignKey(Articulo, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.quantity} x {self.product.inventory.product.name}"
-
-
 class Order(models.Model):
     user = models.ForeignKey(
-        UserBase, verbose_name=("order_user"), on_delete=models.CASCADE)
+        UserBase, on_delete=models.CASCADE, blank=True, null=True)
     start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField(blank=True, null=True)
+    ordered_date = models.DateTimeField(
+        auto_now_add=True, blank=True, null=True)
     ordered = models.BooleanField(default=False)
     billing_address = models.ForeignKey(
         Address, related_name='billing_address', blank=True, null=True, on_delete=models.SET_NULL)
@@ -30,7 +20,49 @@ class Order(models.Model):
 
     @property
     def reference_number(self):
-        return f"{self.pk}"
+        return f"ORDER-{self.pk}"
+
+    def get_raw_subtotal(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_raw_total_item_price()
+        return total
+
+    def get_subtotal(self):
+        subtotal = self.get_raw_subtotal()
+        return subtotal
+
+    def get_raw_total(self):
+        subtotal = self.get_raw_subtotal()
+        # agregar suma de IGV, Delivery, Resta DESCUENTOS
+        #total = subtotal - discounts + tax + delivery
+        return subtotal
+
+    def get_total(self):
+        total = self.get_raw_total()
+        return total
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(
+        Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Articulo, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.title}"
+
+    def get_raw_total_item_price(self):
+        if self.product.product.discount_price:
+            precio_producto = self.product.product.discount_price
+        else:
+            precio_producto = self.product.product.store_price
+
+        return self.quantity * precio_producto
+
+    def get_total_item_price(self):
+        price = self.get_raw_total_item_price()  # 1000
+        return price
 
 
 class Payment(models.Model):

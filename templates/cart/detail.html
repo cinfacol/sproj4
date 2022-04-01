@@ -11,10 +11,9 @@
 {% block content %}
   <div class = "container pb-3">
     <h1>Shopping Cart</h1>
-    {% if cart %}
       <table class='table'>
         <thead>
-          <tr>
+          <tr class="text-center">
             <th>Image</th>
             <th>Product</th>
             <th>Quantity</th>
@@ -24,50 +23,55 @@
           </tr>
         </thead>
         <tbody>
-          {% for item in cart %}
-            {% with  product=item.product  %}
-              <tr>
-                <td>
-                  <a href="{{ product.get_absolute_url }}">
-                    <img height="35" src="{{ product.img.url }}">
-                  </a>
-                </td>
-                <td> {{ product.title }} </td>
-                <td>
-                  <form action="{% url 'cart:cart_add' product.id %}" method="POST">
-                    {% csrf_token %}
-                    {{ item.update_quantity_form.quantity }}
-                    {{ item.update_quantity_form.override }}
-                    <input type="submit" value="Update">
-                  </form>
-                </td>
-                <td>
-                  <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                    <input type="submit" value="Remove">
-                    {% csrf_token %}
-                  </form>
-                </td>
-                <td class="num">$ {{ item.price|intcomma }}</td>
-                <td class="num">$ {{ item.total_price|intcomma }}</td>
-              </tr>
-            {% endwith %}
+          {% for item in post %}
+            <tr class="text-center">
+              <td>
+                <a href="{{ item.product.get_absolute_url }}">
+                  <img height="35" src="{{ item.product.img.url }}">
+                </a>
+              </td>
+              <td> {{ item.product.title }} </td>
+              <td>
+                <div class="input-group" style="max-width: 150px;">
+                  <a href="{% url 'cart:decrease-quantity' item.id %}" class="btn btn-outline-primary" type="button">&minus;</a>
+                  <input type="text" class="form-control text-center" value="{{ item.quantity }}">
+                  <a href="{% url 'cart:increase-quantity' item.id %}" class="btn btn-outline-primary" type="button">&plus;</a>
+                </div>
+              </td>
+              <td>
+                <a href="{% url 'cart:remove-from-cart' item.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+              </td>
+              <td class="num">$ {{ item.product.product.get_price|intcomma }}</td>
+              <td class="num">$ {{ item.get_total_item_price|intcomma }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6">
+                <div class="alert alert-warning">
+                  No has agregado productos a tu carrito de compras. <a href="{% url 'store:home' %}">Ver productos</a>
+                </div>
+              </td>
+            </tr>
           {% endfor %}
+          {% if post %}
+            <tr class="total">
+            <td>Subtotal</td>
+            <td colspan="4"></td>
+            <td class="num">$ {{ order.get_subtotal|intcomma }}</td>
+          </tr>
           <tr class="total">
             <td>Total</td>
             <td colspan="4"></td>
-            <td class="num">$ {{ cart.get_total_price|intcomma }}</td>
+            <td class="num">$ {{ order.get_total|intcomma }}</td>
           </tr>
+          {% else %}
+
+          {% endif %}
         </tbody>
       </table>
       <p class="text-right">
         <a href="{% url 'store:home' %}" class="btn btn-primary">Seguir Comprando</a>
         <a href="{% url 'cart:checkout' %}" class="btn btn-warning">Verificar Compra</a>
       </p>
-    {% else %}
-      <div class="alert alert-warning">No hay productos agregados a tu carrito de compras</div>
-      <p class="text-right">
-        <a href="{% url 'store:home' %}" class="btn btn-primary">Seguir Comprando</a>
-      </p>
-    {% endif %}
   </div>
 {% endblock content %}

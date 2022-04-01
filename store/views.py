@@ -1,7 +1,9 @@
-from cart.forms import CartAddProductForm
-from django.shortcuts import get_object_or_404, render
-from django.views.generic import DetailView, ListView
-from products.models import Category, Product
+from cart.cart import get_or_set_order_session
+from cart.forms import AddToCartForm
+from django.shortcuts import get_object_or_404, render, reverse
+from django.views import generic
+from django.views.generic import ListView
+from products.models import Category
 
 from .models import Articulo
 
@@ -15,16 +17,40 @@ class HomeView(ListView):
     template_name = 'index.html'
 
 
-class DetalleView(DetailView):
+class DetalleView(generic.FormView):
     template_name = 'detail.html'
     model = Articulo
-    cart_product_form = CartAddProductForm()
+    form_class = AddToCartForm
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(DetalleView, self).get_context_data(*args, **kwargs)
+    def get_object(self):
+        return get_object_or_404(Articulo, slug=self.kwargs["slug"])
+
+    def get_success_url(self):
+        return reverse('cart:cart_detail')
+
+    def form_valid(self, form):
+        order = get_or_set_order_session(self.request)
+        product = self.get_object()
+
+        item_filter = order.items.filter(product=product)
+        if item_filter.exists():
+            item = item_filter.first()
+            item.quantity += int(form.cleaned_data['quantity'])
+            item.save()
+
+        else:
+            new_item = form.save(commit=False)
+            new_item.product = product
+            new_item.order = order
+            new_item.save()
+
+        return super(DetalleView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(DetalleView, self).get_context_data(**kwargs)
+
         context["post"] = self.get_object()
         context["images"] = context["post"].product.imagenes.all()[:3]
-        context["cart_product_form"] = self.cart_product_form
 
         return context
 

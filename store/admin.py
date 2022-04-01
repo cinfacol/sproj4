@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import Articulo
+from cart.models import Order, OrderItem
 
 # from cart.models import Order, OrderItem
 

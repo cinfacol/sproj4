@@ -52,9 +52,11 @@
                 <p class="card-text">
                   {{ post.product.description }}
                 </p>
-                <form action="{% url 'cart:cart_add' post.id %}" method="POST">
+                {% comment %} <form action="{% url 'cart:cart_add' post.id %}" method="POST"> {% endcomment %}
+                <form action="" method="POST">
                   {% csrf_token %}
-                  {{ cart_product_form|crispy }}
+                  {{ form|crispy }}
+                  {% comment %} {{ cart_product_form|crispy }} {% endcomment %}
                   <input type="submit" class="btn btn-primary btn-md my-0 p" value="{% translate "Agregar al carrito" %}">
                 </form>
               </div>
@@ -74,11 +76,27 @@
           quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
       </div>
     </div>
-    <div class="row wow fadeIn">
+    <div class="row">
       {% for image in images %}
-        <div class="col-lg-4 col-md-12 mb-4">
-          <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.alt_text }}">
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card-group h-100">
+            <div class="card">
+              <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.alt_text }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ image.product.name }}</h5>
+                <p class="card-text">{{ image.product.description }}</p>
+                <p class="card-text"><small class="text-muted">{{ image.product.brand }}</small></p>
+              </div>
+            </div>
+          </div>
         </div>
+
+
+        {% comment %} <div class="col-lg-4 col-md-12 mb-4">
+          <div class="card h-100">
+            <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.alt_text }}">
+          </div>
+        </div> {% endcomment %}
       {% endfor %}
     </div>
   </div>

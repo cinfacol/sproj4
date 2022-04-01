@@ -175,7 +175,7 @@ class Product(models.Model):
     type = models.ForeignKey(
         Type, verbose_name=_("Product Type"), on_delete=models.CASCADE)
     attribute = models.ManyToManyField(
-        Attribute, related_name=_("Attributes"))
+        Attribute, related_name=_("attributes"))
     description = models.TextField(
         unique=False,
         null=False,
@@ -267,6 +267,12 @@ class Product(models.Model):
 
     def get_categories(self):
         return ', '.join([str(c) for c in self.category.all()])
+
+    def get_price(self):
+        if self.discount_price:
+            return self.discount_price
+        else:
+            return self.store_price
 
     class Meta:
         verbose_name_plural = 'Products'
