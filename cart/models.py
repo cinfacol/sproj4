@@ -13,9 +13,9 @@ class Order(models.Model):
         auto_now_add=True, blank=True, null=True)
     ordered = models.BooleanField(default=False)
     billing_address = models.ForeignKey(
-        Address, related_name='billing_address', blank=True, null=True, on_delete=models.SET_NULL)
+        Address, related_name='dir_facturacion', blank=True, null=True, on_delete=models.SET_NULL)
     shipping_address = models.ForeignKey(
-        Address, related_name='shipping_address', blank=True, null=True, on_delete=models.SET_NULL)
+        Address, related_name='dir_envio', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.reference_number

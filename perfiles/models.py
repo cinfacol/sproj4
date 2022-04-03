@@ -145,18 +145,18 @@ class Profile(models.Model):
 
 
 class AddressType(DjangoChoices):
-    billing = ChoiceItem('Dirección de Facturación')
-    send = ChoiceItem('Dirección de Envío')
+    billing = ChoiceItem('billing_address')
+    send = ChoiceItem('shipping_address')
 
 
 class Address(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(UserBase, on_delete=models.CASCADE)
-    residencia_address = models.CharField(
-        max_length=150, verbose_name='Dirección 1')
-    oficina_address = models.CharField(
-        max_length=150, verbose_name='Dirección 2')
+    shipping_address = models.CharField(
+        max_length=150, verbose_name='Dirección de envío')
+    billing_address = models.CharField(
+        max_length=150, verbose_name='Dirección de facturacion')
     pais = CountryField(multiple=False)
     departamento = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
@@ -167,7 +167,7 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.residencia_address}, {self. oficina_address}, {self.ciudad}, {self.zip}"
+        return f"{self.shipping_address}, {self.billing_address}, {self.ciudad}, {self.zip}"
 
     class Meta:
         verbose_name = 'Direccion'

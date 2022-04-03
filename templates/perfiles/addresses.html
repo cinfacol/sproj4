@@ -40,12 +40,12 @@
             <dl class="row">
               <dt class="col-sm-5">Residencia:</dt>
               <dd class="col-sm-7">
-                {{address.residencia_address}}
+                {{address.shipping_address}}
               </dd>
-              {% if address.oficina_address %}
+              {% if address.billing_address %}
                 <dt class="col-sm-5">Oficina:</dt>
                 <dd class="col-sm-7">
-                  {{address.oficina_address}}
+                  {{address.billing_address}}
                 </dd>
               {% endif %}
               <dt class="col-sm-5">Ciudad:</dt>

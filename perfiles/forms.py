@@ -11,17 +11,17 @@ class UserAddressForm(forms.ModelForm):
 
     class Meta:
         model = Address
-        fields = ["residencia_address",
-                  "oficina_address", "ciudad", "departamento", "zip"]
+        fields = ["shipping_address",
+                  "billing_address", "ciudad", "departamento", "zip"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["residencia_address"].widget.attrs.update(
+        self.fields["shipping_address"].widget.attrs.update(
             {"class": "form-control mb-2 account-form",
                 "placeholder": "Tu dirección de envío"}
         )
-        self.fields["oficina_address"].required = False
-        self.fields["oficina_address"].widget.attrs.update(
+        self.fields["billing_address"].required = False
+        self.fields["billing_address"].widget.attrs.update(
             {"class": "form-control mb-2 account-form",
                 "placeholder": "Dirección de tu oficina (opcional)"}
         )

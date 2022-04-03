@@ -11,8 +11,8 @@ admin.site.register(UserBase, list_display=(
 ))
 admin.site.register(Address, list_display=(
     'user',
-    'residencia_address',
-    'oficina_address',
+    'shipping_address',
+    'billing_address',
     'address_type',
     'default',
 ))
