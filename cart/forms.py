@@ -15,10 +15,3 @@ class AddToCartForm(forms.ModelForm):
     class Meta:
         model = OrderItem
         fields = ['quantity', 'override']
-
-    """ def __init__(self, *args, **kwargs):
-        self.product_id = kwargs.pop('product_id')
-        articulo = Articulo.objects.get(id=self.product_id)
-        super().__init__(*args, **kwargs)
-
-        self.fields['name'].queryset = articulo.product.attribute.all() """

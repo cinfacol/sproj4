@@ -93,24 +93,28 @@
                                         <th>Total</th>
                                 </thead>
                                 <tbody>
-                                    {% for item in cart %}
+                                    {% for item in order.items.all %}
                                     <tr>
                                         <td>
                                             {{ item.product.title }}
                                             <strong class="mx-2">x</strong> {{ item.quantity }}
                                         </td>
                                         <td>
-                                            $ {{ item.total_price|intcomma }}
+                                            $ {{ item.get_total_item_price|intcomma }}
                                         </td>
                                     </tr>
                                     {% endfor %}
-                                    <tr>
-                                        <td><strong class="text-black font-weight-bold">Subtotal</strong></td>
-                                        <td>$ {{ cart.get_total_price|intcomma }}</td>
+                                    <tr class="total">
+                                        <th>Subtotal</th>
+                                        <th>$ {{ order.get_subtotal|intcomma }}</th>
                                     </tr>
-                                    <tr>
-                                        <td><strong>Order Total</strong></td>
-                                        <td><strong class="text-black font-weight-bold">$ {{ cart.get_total_price|intcomma }}</strong></td>
+                                    <tr class="total">
+                                        <th>Impuesto (IVA 16%)</th>
+                                        <th>$ {{ order.get_impuesto|intcomma }}</th>
+                                    </tr>
+                                    <tr class="total">
+                                        <th><strong>Order Total</strong></th>
+                                        <th>$ {{ order.get_total|intcomma }}</th>
                                     </tr>
                                 </tbody>
                             </table>

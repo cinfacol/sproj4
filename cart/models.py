@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from perfiles.models import Address, UserBase
 from store.models import Articulo
@@ -25,12 +27,17 @@ class Order(models.Model):
     def get_raw_subtotal(self):
         total = 0
         for order_item in self.items.all():
-            total += order_item.get_raw_total_item_price()
+            total += order_item.get_total_item_price()
         return total
 
     def get_subtotal(self):
-        subtotal = self.get_raw_subtotal()
+        subtotal = self.get_raw_subtotal() - self.get_impuesto()
         return subtotal
+
+    def get_impuesto(self):
+        valor_impuesto = 16
+        impuesto = self.get_raw_subtotal() * valor_impuesto / 100
+        return impuesto
 
     def get_raw_total(self):
         subtotal = self.get_raw_subtotal()

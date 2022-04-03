@@ -1,6 +1,5 @@
-from urllib import request
-
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views import generic
 from perfiles.forms import UserAddressForm
 from perfiles.models import Address
@@ -32,13 +31,19 @@ class CheckoutView(generic.FormView):
     template_name = 'cart/checkout.html'
     form_class = UserAddressForm
 
+    def get_success_url(self):
+        return reverse("store:home")  # TODO payment
+
+    def form_valid(self, form):
+        order = get_or_set_order_session(self.request)
+
     def get_context_data(self, *args, **kwargs):
         cart = get_or_set_order_session(self.request)
         addresses = Address.objects.filter(user=self.request.user)
 
         context = super(CheckoutView, self).get_context_data(**kwargs)
-        context['order'] = get_or_set_order_session(self, request)
-        context['cart'] = context['order'].items.all()
+        context['order'] = get_or_set_order_session(self.request)
+        # context['cart'] = context['order'].items.all()
         context['addresses'] = addresses
         return context
 
