@@ -167,6 +167,9 @@ if DEBUG is False:
 
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+    PAYPAL_CLIENT_ID = env('PAYPAL_SANDBOX_CLIENT_ID')
+    PAYPAL_SECRET_KEY = env('PAYPAL_SANDBOX_SECRET_KEY')
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

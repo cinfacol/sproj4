@@ -1,3 +1,5 @@
+from perfiles.models import Address
+
 from .models import Order
 
 
@@ -19,4 +21,13 @@ def get_or_set_order_session(request):
     if request.user.is_authenticated and order.user is None:
         order.user = request.user
         order.save()
+
     return order
+
+    """ usuario = request.user
+    address = Address.objects.filter(user=usuario, default=True)
+    if address:
+        for addr in address:
+            order.shipping_address = addr.shipping_address
+            print(addr.shipping_address)
+            order.save() """

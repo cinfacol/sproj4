@@ -17,7 +17,6 @@ class UserProfileView(View):
         user = get_object_or_404(UserBase, username=username)
         profile = Profile.objects.get(user=user)
         addresses = Address.objects.filter(user=user, default=True)
-        print(profile.picture)
 
         context = {
             'user': user,
@@ -69,6 +68,7 @@ def view_address(request):
     addresses = Address.objects.filter(user=request.user)
     context = {
         "addresses": addresses,
+        "usuario": request.user
     }
     return render(request, "perfiles/addresses.html", context)
 

@@ -14,8 +14,6 @@ class ProductListView(generic.ListView):
     def get(self, request):
         products = Product.objects.all()
         products_images = products.filter(imagenes__default=True)
-        print(products)
-        print(products_images)
 
         context = {
             "products": products,

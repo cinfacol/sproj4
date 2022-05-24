@@ -14,4 +14,6 @@ urlpatterns = [
     path('remove-from-cart/<pk>/',
          views.RemoveFromCartView.as_view(), name='remove-from-cart'),
     path('checkout/', login_required(views.CheckoutView.as_view()), name='checkout'),
+    path('payment/', login_required(views.PaymentView.as_view()), name='payment'),
+    path('thanks/', views.ThankYouView.as_view(), name='thanks'),
 ]

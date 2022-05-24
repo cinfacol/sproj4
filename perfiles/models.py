@@ -145,8 +145,8 @@ class Profile(models.Model):
 
 
 class AddressType(DjangoChoices):
-    billing = ChoiceItem('billing_address')
-    send = ChoiceItem('shipping_address')
+    B = ChoiceItem('Billing')
+    S = ChoiceItem('Shipping')
 
 
 class Address(models.Model):
@@ -163,7 +163,7 @@ class Address(models.Model):
     zip = models.CharField(
         max_length=100, verbose_name='Zip code')
     address_type = models.CharField(
-        max_length=50, choices=AddressType.choices, default=AddressType.send)
+        max_length=8, choices=AddressType.choices, default=AddressType.S)
     default = models.BooleanField(default=False)
 
     def __str__(self):

@@ -2,7 +2,6 @@ import datetime
 
 from django import forms
 from django.forms.widgets import NumberInput
-from typing_extensions import Required
 
 from .models import Address, Profile, UserBase
 
@@ -15,7 +14,9 @@ class UserAddressForm(forms.ModelForm):
                   "billing_address", "ciudad", "departamento", "zip"]
 
     def __init__(self, *args, **kwargs):
+        # user_id = kwargs.pop('user_id')
         super().__init__(*args, **kwargs)
+
         self.fields["shipping_address"].widget.attrs.update(
             {"class": "form-control mb-2 account-form",
                 "placeholder": "Tu dirección de envío"}
